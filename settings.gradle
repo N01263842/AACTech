@@ -1,0 +1,2 @@
+include ':aac-tech'
+rootProject.name='AAC-Tech'
