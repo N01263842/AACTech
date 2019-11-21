@@ -52,8 +52,22 @@ public class ClientParamedHome extends AppCompatActivity {
         client.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ClientParamedHome.this,client_Activity.class);
+                Intent intent = new Intent(ClientParamedHome.this,videoChat_Activity.class);
                 startActivity(intent);
+            }
+        });
+
+        client.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == KeyEvent.ACTION_DOWN){
+                    paramedic.setBackgroundColor(Color.BLUE);
+                }
+                else if(motionEvent.getAction() == KeyEvent.ACTION_UP){
+                    paramedic.setBackgroundColor(Color.RED);
+                }
+
+                return false;
             }
         });
     }
