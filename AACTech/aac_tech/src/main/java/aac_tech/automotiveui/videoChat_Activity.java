@@ -62,6 +62,10 @@ public class videoChat_Activity extends AppCompatActivity implements Connector.I
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
+
+
+
+
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
          NavigationView navigationView = findViewById(R.id.nav_view);
@@ -151,6 +155,7 @@ public class videoChat_Activity extends AppCompatActivity implements Connector.I
     }
 
     public void Connect(View v){
+
         String token = "cHJvdmlzaW9uAHVzZXIxQGI4YzcwMS52aWR5by5pbwA2MzczOTY4NzEyOAAAZTBjYTEyODcyZTJhYTQ1MTI1YjQ2YThmMGRhZGU5ODMxNjAwOTAyZGQ2ZGJiZDYwOGE4YTY5MzZkZGQ0MWUzZjE3ODI1Zjk5YmQ0ZDFiNGE5YjJlNWI0YzRkOWU0YWY4";
         vc.connect("prod.vidyo.io",token,"DemoUser","DemoRoom",this);
     }

@@ -8,4 +8,7 @@
     <color name="background">#ffffff</color>
     <color name="signin">#d3d3d3</color>
     <color name="color1">#d5e29f</color>
+    <color name="call">#90ee90</color>
+    <color name="end">#ff0000</color>
+    <color name="start">#ffa500</color>
 </resources>
