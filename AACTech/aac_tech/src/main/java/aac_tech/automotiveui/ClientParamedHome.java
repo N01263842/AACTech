@@ -24,7 +24,7 @@ public class ClientParamedHome extends AppCompatActivity {
         final Button paramedic = (Button)findViewById(R.id.homescreenB1);
         Button client = (Button)findViewById(R.id.homescreenB2);
 
-        System.out.println("Testing");
+        System.out.println("Testing this again");
 
 
         paramedic.setOnClickListener(new View.OnClickListener() {
