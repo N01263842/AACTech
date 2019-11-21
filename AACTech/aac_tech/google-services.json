@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "291845870303",
+    "firebase_url": "https://aac-tech.firebaseio.com",
+    "project_id": "aac-tech",
+    "storage_bucket": "aac-tech.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:291845870303:android:48485d6ffdbb4d73904f6a",
+        "android_client_info": {
+          "package_name": "aac_tech.automotiveui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "291845870303-sp0on2r0r3dqjqn2rebkukt8gj94lfs4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "aac_tech.automotiveui",
+            "certificate_hash": "bef63fcdf8f2044ca2969cda921f20aa6aeeddef"
+          }
+        },
+        {
+          "client_id": "291845870303-09inkn8go4vkusv6tn7r227pdlivtod9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDr1aPRli7NETCRcUXwSA87uh3m9fWGFj0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "291845870303-09inkn8go4vkusv6tn7r227pdlivtod9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
