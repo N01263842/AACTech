@@ -27,12 +27,13 @@
         android:roundIcon="@mipmap/paramed_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="aac_tech.automotiveui.Client_Address_Info"></activity>
-        <activity android:name="aac_tech.automotiveui.videoChat_Activity" />
+
+        <activity android:name=".Client_Address_Info" />
+        <activity android:name=".videoChat_Activity" />
         <activity
-            android:name="aac_tech.automotiveui.optionsNavigation"
+            android:name=".optionsNavigation"
             android:label="@string/title_activity_options_navigation" />
-        <activity android:name="aac_tech.automotiveui.paramedActivity" />
+        <activity android:name=".paramedActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -46,11 +47,12 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name="aac_tech.automotiveui.MapsActivity"
+            android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name="aac_tech.automotiveui.paramedLogin" />
-        <activity android:name="aac_tech.automotiveui.client_Activity" />
-        <activity android:name="aac_tech.automotiveui.ClientParamedHome">
+        <activity android:name=".paramedLogin" />
+        <activity android:name=".client_Activity" />
+        <activity android:name=".ClientParamedHome"/>
+        <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
