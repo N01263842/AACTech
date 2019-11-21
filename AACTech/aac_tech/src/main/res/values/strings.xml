@@ -10,6 +10,7 @@
     <string name="paramedSignIn">Paramedic Sign in:</string>
     <string name="username">Enter username</string>
     <string name="password">Enter password</string>
+    <string name="welcome">Welcome to paramed!</string>
     <string name="signin">sign in</string>
     <string name="title_activity_maps">Map</string>
     <string-array name="hosp1">
