@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ClientParamedHome"
+    android:background="@color/color1">
+
+    <Button
+        android:id="@+id/homescreenB1"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:background="@color/Button"
+        android:textSize="40dp"
+        android:textStyle="italic"
+        android:outlineAmbientShadowColor="@color/Button"
+        android:text="@string/homescreenB1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.278" />
+
+    <Button
+        android:id="@+id/homescreenB2"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:background="@color/Button"
+        android:text="@string/homescreenB2"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/background"
+        android:textSize="40dp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.76" />
+
+    <ImageView
+        android:id="@+id/homescreenI1"
+        android:layout_width="125dp"
+        android:layout_height="93dp"
+        android:text="@string/homescreenI1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.094"
+        app:srcCompat="@drawable/homescreen1" />
+
+    <ImageView
+        android:id="@+id/homescreenI2"
+        android:layout_width="120dp"
+        android:layout_height="110dp"
+        android:text="@string/homescreenI2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.535"
+        app:srcCompat="@drawable/homescreen2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

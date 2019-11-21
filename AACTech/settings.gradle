@@ -1,0 +1,2 @@
+include ':aac_tech'
+rootProject.name='AACTech'
