@@ -4,8 +4,14 @@
  */
 package aac_tech.automotiveui;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.Manifest;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 
@@ -46,6 +52,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        if (checkLocationPermission()) {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+
+                //Request location updates:
+                googleMap.setMyLocationEnabled(true);
+            }
+        }
+
         Resources res = getResources();
         //Containers to store hospital location for display on maps
         String [] hosp1 = res.getStringArray(R.array.hosp1);
@@ -53,6 +69,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String [] hosp3 = res.getStringArray(R.array.hosp3);
         String [] hosp4 = res.getStringArray(R.array.hosp4);
         String [] hosp5 = res.getStringArray(R.array.hosp5);
+
+        mMap.getUiSettings().setCompassEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mMap.getUiSettings().setRotateGesturesEnabled(true);
 
         // Add a marker in Sydney and move the camera
         LatLng hospital1 = (new LatLng(Float.parseFloat(hosp1[1]), Float.parseFloat(hosp1[2])));
@@ -77,6 +97,76 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(hospital5));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hospital1,10.0f));
+    }
+
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(MapsActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MapsActivity.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(MapsActivity.this)
+                        .setTitle("")
+                        .setMessage("")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(MapsActivity.this,new String[]
+                                        {Manifest.permission.ACCESS_FINE_LOCATION},1);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(MapsActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        1);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+            {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // location-related task you need to do.
+                    if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+
+
+                        mMap.setMyLocationEnabled(true);
+                    }
+
+                } else {
+
+
+
+                }
+                return;
+            }
+
+        }
     }
     //getChildFragmentManager().beginTransaction().replace(R.id.map, mapFragment).commit();
 
