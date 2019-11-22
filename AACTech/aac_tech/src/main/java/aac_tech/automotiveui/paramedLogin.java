@@ -65,7 +65,7 @@ public class paramedLogin extends AppCompatActivity {
 
     }
 
-    public void getParamedicInfo(){
+    private void getParamedicInfo(){
 
         paraInfo = new ArrayList();
         par = new paramedInfo();
@@ -84,6 +84,7 @@ public class paramedLogin extends AppCompatActivity {
 
                         String name = paramedData.child("name").getValue().toString();
                         String pass = paramedData.child("pass").getValue().toString();
+                        String parent = paramedData.getKey();
 
                         par.setFullName(name);
                         par.setPasswd(pass);
@@ -94,6 +95,7 @@ public class paramedLogin extends AppCompatActivity {
                         paraInfo.add(paramedData.child("hospitalID").getValue().toString());
                         paraInfo.add(paramedData.child("status").getValue().toString());
                         paraInfo.add(paramedData.child("login").getValue().toString());
+                        paraInfo.add(parent);
 
 
                         data_retrieved = 1;
