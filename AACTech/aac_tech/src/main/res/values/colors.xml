@@ -13,4 +13,5 @@
     <color name="end">#ff0000</color>
     <color name="start">#ffa500</color>
     <color name="frame1">#ffffe0</color>
+    <color name="spin_c">#98fb88</color>
 </resources>

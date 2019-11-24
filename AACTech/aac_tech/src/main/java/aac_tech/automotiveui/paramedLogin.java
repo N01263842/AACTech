@@ -96,6 +96,8 @@ public class paramedLogin extends AppCompatActivity {
                         paraInfo.add(paramedData.child("status").getValue().toString());
                         paraInfo.add(paramedData.child("login").getValue().toString());
                         paraInfo.add(parent);
+                        paraInfo.add(paramedData.child("activity").getValue().toString());
+                        paraInfo.add(paramedData.child("date").getValue().toString());
 
 
                         data_retrieved = 1;

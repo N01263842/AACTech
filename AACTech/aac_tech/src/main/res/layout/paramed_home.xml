@@ -7,36 +7,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <Spinner
         android:id="@+id/hosp_spin"
+
         android:layout_width="match_parent"
-        android:layout_height="29dp"
+        android:layout_height="50dp"
+        android:background="@color/spin_c"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.078" />
+        app:layout_constraintVertical_bias="0.092" />
 
     <ToggleButton
         android:id="@+id/tog_active"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
+        android:textOff="inactive"
+        android:textOn="active"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.987"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.004"
-        android:textOff="inactive"
-        android:textOn="active"/>
+        app:layout_constraintVertical_bias="0.001" />
 
     <FrameLayout
         android:id="@+id/mymaps_home"
-        android:layout_width="403dp"
-        android:layout_height="186dp"
-        android:layout_marginBottom="300dp"
+        android:layout_width="408dp"
+        android:layout_height="225dp"
+        android:layout_marginBottom="210dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,15 +63,15 @@
 
     <ListView
         android:id="@+id/para_list"
-        android:layout_width="410dp"
-        android:layout_height="400dp"
+        android:layout_width="409dp"
+        android:layout_height="253dp"
         android:background="@color/color2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.828" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,8 @@
 package aac_tech.automotiveui.ui.home;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,6 +16,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
@@ -37,6 +40,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,40 +50,50 @@ import com.google.firebase.database.ValueEventListener;
 import org.xmlpull.v1.XmlPullParser;
 
 import aac_tech.automotiveui.R;
+import aac_tech.automotiveui.UpdateInfo;
 import aac_tech.automotiveui.optionsNavigation;
 import aac_tech.automotiveui.paramedInfo;
 import aac_tech.automotiveui.paramedLogin;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class HomeFragment extends Fragment {
 
     private ArrayList info;
-    ArrayAdapter ad;
+    ArrayAdapter ad_spin, ad_list;
     private Resources res;
     private GoogleMap googleMap;
     private MapView minMapView;
     private TextView AddressInfo;
     private ToggleButton tb_state;
     private ListView para_list;
-    String [] hosp_list;
+    String [] hosp_list, user_list;
     private DatabaseReference database;
     paramedInfo parainfo;
     Spinner add_spin;
+    int [] in_data;
+    int hospID = 0;
     private String [] hosp1, hosp2, hosp3, hosp4, hosp5;
+    UpdateInfo updateInfo;
 
     private HomeViewModel homeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+                             ViewGroup container, final Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.paramed_home, container, false);
+        final View root = inflater.inflate(R.layout.paramed_home, container, false);
         minMapView = (MapView) root.findViewById(R.id.min_map);
         AddressInfo = (TextView)root.findViewById(R.id.home_addres);
         tb_state = (ToggleButton)root.findViewById(R.id.tog_active);
         para_list = (ListView)root.findViewById(R.id.para_list);
         add_spin = (Spinner)root.findViewById(R.id.hosp_spin);
+
         res = getResources();
+
+        Intent intent = getActivity().getIntent();
+
+        info = intent.getStringArrayListExtra("info");
 
         hosp1 = res.getStringArray(R.array.hosp1);
         hosp2 = res.getStringArray(R.array.hosp2);
@@ -97,42 +111,236 @@ public class HomeFragment extends Fragment {
         hosp_list[3] = hosp4[3];
         hosp_list[4] = hosp5[3];
 
-        ad = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,hosp_list);
-        add_spin.setAdapter(ad);
-        para_list.setAdapter(ad);
+        ad_spin = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_dropdown_item,hosp_list);
+        add_spin.setAdapter(ad_spin);
+
+        user_list = new String[3];
+
+        user_list[0] = "Paramedic     : "+info.get(0).toString();
+        user_list[1] = "Hospital ID   : "+info.get(2).toString();
+        user_list[2] = "Status        : "+info.get(3).toString();
+
+        ad_list = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,user_list);
+
+        para_list.setAdapter(ad_list);
+        database = FirebaseDatabase.getInstance().getReference().child("paramedics");
+        in_data = new int[2];
+        in_data[0] = 0; // will contain value to implement a function when state of toggle button changes
+        in_data[1] = 0; // will contain value to implement a function an item is clicked in spinner
 
 
 
 
 
+        if(info.get(3).equals("active")) {
+            tb_state.setChecked(true);
+            tb_state.setBackgroundColor(Color.GREEN);
+        }
+
+        add_spin.setSelection( Integer.parseInt(info.get(2).toString()) - 1 );
+
+        //Start the map activity
+        startMap(savedInstanceState);
+
+
+        add_spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                hospID = i+1;
+                database = FirebaseDatabase.getInstance().getReference().child("paramedics");
+                database.child(info.get(5).toString()).child("hospitalID").setValue(hospID);
+                in_data[1] = 1;
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
 
         tb_state.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(tb_state.isChecked()) {
-                    tb_state.setBackgroundColor(Color.GREEN);
-                    parainfo = new paramedInfo();
-                    parainfo.setStatus("active");
-                    database = FirebaseDatabase.getInstance().getReference().child("paramedics");
-                    database.child(info.get(5).toString()).child("status").setValue(parainfo.getStatus());
+                //    tb_state.setBackgroundColor(Color.GREEN);
+                    String status_act = new String("active");
+                    in_data[0] = 1;
+                    Date date = new Date();
+                    updateInfo = new UpdateInfo();
+                    updateInfo.setDate(date.toString());
+                    updateInfo.setStatus(status_act);
+                    updateInfo.setActivity(String.valueOf(date.getTime()));
+
+                    database.child(info.get(5).toString()).child("activity").setValue(updateInfo.getActivity());
+                    database.child(info.get(5).toString()).child("status").setValue(updateInfo.getStatus());
+                    database.child(info.get(5).toString()).child("date").setValue(updateInfo.getDate());
 
                 }
                 else {
-                    tb_state.setBackgroundColor(Color.RED);
-                    parainfo = new paramedInfo();
-                    parainfo.setStatus("active");
-                    database = FirebaseDatabase.getInstance().getReference().child("paramedics");
-                    database.child(info.get(5).toString()).child("status").setValue(parainfo.getStatus());
+                  //  tb_state.setBackgroundColor(Color.RED);
+                    String status_in = new String("inactive");
+                    in_data[0] = 2;
+                    Date date = new Date();
+                    updateInfo = new UpdateInfo();
+                    updateInfo.setDate(date.toString());
+                    updateInfo.setStatus(status_in);
+                    updateInfo.setActivity(String.valueOf(date.getTime()));
+
+                    database.child(info.get(5).toString()).child("activity").setValue(updateInfo.getActivity());
+                    database.child(info.get(5).toString()).child("status").setValue(updateInfo.getStatus());
+                    database.child(info.get(5).toString()).child("date").setValue(updateInfo.getDate());
+
                 }
             }
         });
 
-        minMapView.onCreate(savedInstanceState);
+        para_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i == 0){
+                    String instruct1 = new String();
+                    instruct1 = "Hi "+info.get(0)+"!\n\nFor any inquires about your name, please notify the database administrator.";
 
-        Intent intent = getActivity().getIntent();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage(instruct1);
+                    builder.setCancelable(true);
+                    builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-        info = intent.getStringArrayListExtra("info");
+                            dialogInterface.cancel();
+                        }
+                    });
+
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+                else if(i == 1){
+                    int hosp_offset = 0;
+                    String instruct2 = new String();
+
+                    for(int cnt=0; cnt < hosp_list.length;cnt++){
+                        if(Integer.parseInt(info.get(2).toString()) == (cnt + 1)){
+                            hosp_offset = cnt;
+                            break;
+                        }
+                    }
+
+                    instruct2 = "The hospital that you are currently stationed is:\n\n"+hosp_list[hosp_offset]+"\n"+
+                                "\nDate of hospital selection: \n\n"+info.get(7);
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage(instruct2);
+                    builder.setCancelable(true);
+                    builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            dialogInterface.cancel();
+                        }
+                    });
+
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+                else if(i == 2){
+                    long state_start = Long.parseLong(info.get(6).toString());
+                    Date date = new Date();
+                    long state_duration = date.getTime();
+
+                    long difference = (state_duration - state_start)/1000;
+                    int days = 0, hours = 0, mins = 0, secs = 0;
+
+                    if(difference >= 86400){ // If state duration has been on for a day or more, then do this
+                        days = (int)(difference/86400);
+                        difference -= (days*86400);
+                    }
+                    if(difference >= 3600){ // If state duration has been on for an hour or more, do this
+                        hours = (int)(difference/3600);
+                        difference -= (hours*3600);
+                    }
+                    if(difference >= 60){
+                        mins = (int)(difference/60);
+                        difference -= (mins*60);
+                    }
+
+                    secs = (int)difference;
+
+                    String instruct3 = new String();
+
+                    instruct3 = "Your state is "+info.get(3).toString()+"."+
+                                "\n\nYou have been "+info.get(3).toString()+" for "+days+" days, "+hours+
+                                " hours, "+mins+" minutes, "+secs+" seconds.\n\n"+
+                                "Standby for incoming calls.";
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage(instruct3);
+                    builder.setCancelable(true);
+                    builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            dialogInterface.cancel();
+                        }
+                    });
+
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
+
+
+
+                }
+
+            }
+        });
+
+
+                database.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Intent intent = new Intent(getActivity(), optionsNavigation.class);
+
+                        if (in_data[0] != 0) {
+                            if (in_data[0] == 1) {
+                                info.set(3, "active");
+                            } else {
+                                info.set(3, "inactive");
+                            }
+
+                            in_data[0] = 0;
+                            info.set(6, updateInfo.getActivity());
+                            info.set(7, updateInfo.getDate());
+                            intent.putStringArrayListExtra("info", info);
+
+                            startActivity(intent);
+                        }
+                        else if (in_data[1] == 1) {
+                            info.set(2, hospID);
+                            in_data[1] = 0;
+                            intent.putStringArrayListExtra("info", info);
+                            startActivity(intent);
+                        }
+                    }
+
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+        return root;
+    }
+
+    public void startMap(Bundle bundle){
+        minMapView.onCreate(bundle);
+
+
+
 
         minMapView.onResume();
 
@@ -171,10 +379,10 @@ public class HomeFragment extends Fragment {
                     title = hosp1[3];
 
                     addressInfo = hosp_label+" "+title+"\n"+
-                                  street_label+" "+hosp1[4]+"\n"+
-                                  city_label+" "+hosp1[5]+"\n"+
-                                  province_label+" "+hosp1[6]+"\n"+
-                                  zip_label+" "+hosp1[7];
+                            street_label+" "+hosp1[4]+"\n"+
+                            city_label+" "+hosp1[5]+"\n"+
+                            province_label+" "+hosp1[6]+"\n"+
+                            zip_label+" "+hosp1[7];
 
                     AddressInfo.setText(addressInfo);
                 }
@@ -217,7 +425,7 @@ public class HomeFragment extends Fragment {
 
                     AddressInfo.setText(addressInfo);
                 }
-                else if(Integer.parseInt(String.valueOf(info.get(2))) == Integer.parseInt(hosp2[0])){
+                else if(Integer.parseInt(String.valueOf(info.get(2))) == Integer.parseInt(hosp5[0])){
                     lat = Float.parseFloat(hosp5[1]);
                     lng = Float.parseFloat(hosp5[2]);
                     title = hosp5[3];
@@ -260,7 +468,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        return root;
+
     }
 
     public boolean checkLocationPermission() {
@@ -331,37 +539,5 @@ public class HomeFragment extends Fragment {
             }
 
         }
-    }
-
-    private void getParamedicInfo(){
-
-     //   paraInfo = new ArrayList();
-    //    par = new paramedInfo();
-     //   data_retrieved = 0;
-
-        database = FirebaseDatabase.getInstance().getReference().child("paramedics");
-
-        database.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                //username = dataSnapshot.child()
-
-                for(DataSnapshot paramedData : dataSnapshot.getChildren()){
-                    String username = paramedData.child("username").getValue().toString();
-
-                }
-
-
-
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 }

@@ -107,7 +107,7 @@ public class DashboardFragment extends Fragment {
                     lng = Float.parseFloat(hosp4[2]);
                     title = hosp4[3];
                 }
-                else if(Integer.parseInt(String.valueOf(info.get(2))) == Integer.parseInt(hosp2[0])){
+                else if(Integer.parseInt(String.valueOf(info.get(2))) == Integer.parseInt(hosp5[0])){
                     lat = Float.parseFloat(hosp5[1]);
                     lng = Float.parseFloat(hosp5[2]);
                     title = hosp5[3];
