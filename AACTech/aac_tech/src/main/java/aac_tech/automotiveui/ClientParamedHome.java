@@ -1,7 +1,9 @@
 package aac_tech.automotiveui;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -71,4 +73,32 @@ public class ClientParamedHome extends AppCompatActivity {
             }
         });
     }
+
+    //Android softkey handling
+    @Override
+    public void onBackPressed(){
+        closeApp(R.string.alert_Message);
+    }
+
+    //Creating the dialog box and handling the option chosen
+    public void closeApp (int alertText){
+        DialogInterface.OnClickListener mClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int chose) {
+                switch (chose){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }//End of switch
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.alert_title);
+        builder.setMessage(alertText)
+                .setPositiveButton("Yes", mClickListener)
+                .setNegativeButton("No", mClickListener).show();
+    }//End of closeApp
 }
