@@ -90,6 +90,8 @@ public class paramedLogin extends AppCompatActivity {
                         par.setPasswd(pass);
                         par.setUsername(username);
 
+                        System.out.println("Just testing something");
+
                         paraInfo.add(name);
                         paraInfo.add(username);
                         paraInfo.add(paramedData.child("hospitalID").getValue().toString());
