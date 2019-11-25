@@ -24,7 +24,7 @@ public class ClientParamedHome extends AppCompatActivity {
         setContentView(R.layout.activity_client_paramed_home);
 
         final Button paramedic = (Button)findViewById(R.id.homescreenB1);
-        Button client = (Button)findViewById(R.id.homescreenB2);
+        final Button client = (Button)findViewById(R.id.homescreenB2);
 
 
         paramedic.setOnClickListener(new View.OnClickListener() {
@@ -63,10 +63,10 @@ public class ClientParamedHome extends AppCompatActivity {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == KeyEvent.ACTION_DOWN){
-                    paramedic.setBackgroundColor(Color.BLUE);
+                    client.setBackgroundColor(Color.BLUE);
                 }
                 else if(motionEvent.getAction() == KeyEvent.ACTION_UP){
-                    paramedic.setBackgroundColor(Color.RED);
+                    client.setBackgroundColor(Color.RED);
                 }
 
                 return false;
