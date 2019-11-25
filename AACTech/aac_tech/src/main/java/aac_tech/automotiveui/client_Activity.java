@@ -20,6 +20,8 @@ public class client_Activity extends AppCompatActivity {
 
         Button call = (Button)findViewById(R.id.homescreenB3);
 
+       System.out.println("ok");
+
         call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
