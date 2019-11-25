@@ -5,28 +5,27 @@
 package aac_tech.automotiveui.ui.home;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -40,20 +39,17 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.xmlpull.v1.XmlPullParser;
-
 import aac_tech.automotiveui.R;
 import aac_tech.automotiveui.UpdateInfo;
 import aac_tech.automotiveui.optionsNavigation;
 import aac_tech.automotiveui.paramedInfo;
-import aac_tech.automotiveui.paramedLogin;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,6 +72,7 @@ public class HomeFragment extends Fragment {
     int hospID = 0;
     private String [] hosp1, hosp2, hosp3, hosp4, hosp5;
     UpdateInfo updateInfo;
+    boolean permit = false;
 
     private HomeViewModel homeViewModel;
 
@@ -100,6 +97,11 @@ public class HomeFragment extends Fragment {
         hosp3 = res.getStringArray(R.array.hosp3);
         hosp4 = res.getStringArray(R.array.hosp4);
         hosp5 = res.getStringArray(R.array.hosp5);
+
+        if(info.get(3).equals("active")) {
+            tb_state.setChecked(true);
+            tb_state.setBackgroundColor(Color.GREEN);
+        }
 
 
 
@@ -131,12 +133,6 @@ public class HomeFragment extends Fragment {
 
 
 
-
-        if(info.get(3).equals("active")) {
-            tb_state.setChecked(true);
-            tb_state.setBackgroundColor(Color.GREEN);
-        }
-
         add_spin.setSelection( Integer.parseInt(info.get(2).toString()) - 1 );
 
         //Start the map activity
@@ -164,36 +160,36 @@ public class HomeFragment extends Fragment {
         tb_state.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(tb_state.isChecked()) {
-                //    tb_state.setBackgroundColor(Color.GREEN);
-                    String status_act = new String("active");
-                    in_data[0] = 1;
-                    Date date = new Date();
-                    updateInfo = new UpdateInfo();
-                    updateInfo.setDate(date.toString());
-                    updateInfo.setStatus(status_act);
-                    updateInfo.setActivity(String.valueOf(date.getTime()));
 
-                    database.child(info.get(5).toString()).child("activity").setValue(updateInfo.getActivity());
-                    database.child(info.get(5).toString()).child("status").setValue(updateInfo.getStatus());
-                    database.child(info.get(5).toString()).child("date").setValue(updateInfo.getDate());
+                    if (tb_state.isChecked()) {
+                        tb_state.setBackgroundColor(Color.GREEN);
+                        String status_act = new String("active");
+                        in_data[0] = 1;
+                        Date date = new Date();
+                        updateInfo = new UpdateInfo();
+                        updateInfo.setDate(date.toString());
+                        updateInfo.setStatus(status_act);
+                        updateInfo.setActivity(String.valueOf(date.getTime()));
 
-                }
-                else {
-                  //  tb_state.setBackgroundColor(Color.RED);
-                    String status_in = new String("inactive");
-                    in_data[0] = 2;
-                    Date date = new Date();
-                    updateInfo = new UpdateInfo();
-                    updateInfo.setDate(date.toString());
-                    updateInfo.setStatus(status_in);
-                    updateInfo.setActivity(String.valueOf(date.getTime()));
+                        database.child(info.get(5).toString()).child("activity").setValue(updateInfo.getActivity());
+                        database.child(info.get(5).toString()).child("status").setValue(updateInfo.getStatus());
+                        database.child(info.get(5).toString()).child("date").setValue(updateInfo.getDate());
 
-                    database.child(info.get(5).toString()).child("activity").setValue(updateInfo.getActivity());
-                    database.child(info.get(5).toString()).child("status").setValue(updateInfo.getStatus());
-                    database.child(info.get(5).toString()).child("date").setValue(updateInfo.getDate());
+                    } else {
+                        tb_state.setBackgroundColor(Color.RED);
+                        String status_in = new String("inactive");
+                        in_data[0] = 2;
+                        Date date = new Date();
+                        updateInfo = new UpdateInfo();
+                        updateInfo.setDate(date.toString());
+                        updateInfo.setStatus(status_in);
+                        updateInfo.setActivity(String.valueOf(date.getTime()));
 
-                }
+                        database.child(info.get(5).toString()).child("activity").setValue(updateInfo.getActivity());
+                        database.child(info.get(5).toString()).child("status").setValue(updateInfo.getStatus());
+                        database.child(info.get(5).toString()).child("date").setValue(updateInfo.getDate());
+
+                    }
             }
         });
 
@@ -299,41 +295,57 @@ public class HomeFragment extends Fragment {
         });
 
 
-                database.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Intent intent = new Intent(getActivity(), optionsNavigation.class);
 
-                        if (in_data[0] != 0) {
-                            if (in_data[0] == 1) {
-                                info.set(3, "active");
-                            } else {
-                                info.set(3, "inactive");
-                            }
-
-                            in_data[0] = 0;
-                            info.set(6, updateInfo.getActivity());
-                            info.set(7, updateInfo.getDate());
-                            intent.putStringArrayListExtra("info", info);
-
-                            startActivity(intent);
-                        }
-                        else if (in_data[1] == 1) {
-                            info.set(2, hospID);
-                            in_data[1] = 0;
-                            intent.putStringArrayListExtra("info", info);
-                            startActivity(intent);
-                        }
-                    }
-
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
 
         return root;
+    }
+
+    @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Intent intent = null;
+                try {
+                    intent = new Intent(getActivity(), optionsNavigation.class);
+
+
+                    if (in_data[0] != 0) {
+                        if (in_data[0] == 1) {
+                            info.set(3, "active");
+                        } else {
+                            info.set(3, "inactive");
+                        }
+
+                        in_data[0] = 0;
+                        info.set(6, updateInfo.getActivity());
+                        info.set(7, updateInfo.getDate());
+                        intent.putStringArrayListExtra("info", info);
+
+                        startActivity(intent);
+                    }
+                    else if (in_data[1] == 1) {
+                        info.set(2, hospID);
+                        in_data[1] = 0;
+                        intent.putStringArrayListExtra("info", info);
+                        startActivity(intent);
+                    }
+                }
+                catch(NullPointerException npe){
+                   System.out.println("Something went wrong while refreshing the page");
+
+                }
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
     public void startMap(Bundle bundle){
