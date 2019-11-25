@@ -69,7 +69,7 @@
     <string name="title_activity_options_navigation">optionsNavigation</string>
     <string name="title_home">home</string>
     <string name="title_dashboard">maps</string>
-    <string name="title_notifications">history</string>
+    <string name="title_notifications">clients</string>
     <string name="signout">Sign out</string>
     <string name="update">Update Info</string>
     <string name="activity">View Activity</string>
