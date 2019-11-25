@@ -49,7 +49,12 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".paramedLogin" />
+        <activity android:name=".paramedLogin">
+            <!-- Specifying the parent activity -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ClientParamedHome" />
+        </activity>
         <activity android:name=".client_Activity" />
         <activity android:name=".ClientParamedHome"/>
         <activity android:name=".SplashScreen">

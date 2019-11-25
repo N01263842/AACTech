@@ -63,6 +63,9 @@ public class paramedLogin extends AppCompatActivity {
             }
         });
 
+        //Setting the title and enabling the up arrow
+        //getSupportActionBar().setTitle(R.string.viewInfo_title);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void getParamedicInfo(){
@@ -118,9 +121,6 @@ public class paramedLogin extends AppCompatActivity {
                     Toast toast = Toast.makeText(paramedLogin.this, "Username has not been registered", Toast.LENGTH_LONG);
                     toast.show();
                 }
-
-
-
             }
 
             @Override
