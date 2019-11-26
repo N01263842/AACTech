@@ -27,8 +27,13 @@
         android:roundIcon="@mipmap/paramed_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Client_Address_Info" />
-        <activity android:name=".videoChat_Activity" />
+        <activity android:name=".Client_Address_Info">
+            <!-- Specifying the parent activity -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ClientParamedHome" />
+        </activity>
+        <activity android:name=".videoChat_Activity"/>
         <activity
             android:name=".optionsNavigation"
             android:label="@string/title_activity_options_navigation" />
@@ -54,7 +59,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ClientParamedHome" />
         </activity>
-        <activity android:name=".client_Activity" />
+        <activity android:name=".client_Activity"/>
         <activity android:name=".ClientParamedHome" />
         <activity android:name=".SplashScreen">
             <intent-filter>
