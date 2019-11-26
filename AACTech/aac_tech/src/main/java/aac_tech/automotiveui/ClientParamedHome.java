@@ -1,5 +1,6 @@
 package aac_tech.automotiveui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,11 +13,19 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 /*
  * Team-Name: AAC-Tech
 
  */
 public class ClientParamedHome extends AppCompatActivity {
+
+    private DatabaseReference database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +63,7 @@ public class ClientParamedHome extends AppCompatActivity {
         client.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ClientParamedHome.this,videoChat_Activity.class);
-                startActivity(intent);
+                ClientGetParamedic();
             }
         });
 
@@ -101,4 +109,29 @@ public class ClientParamedHome extends AppCompatActivity {
                 .setPositiveButton("Yes", mClickListener)
                 .setNegativeButton("No", mClickListener).show();
     }//End of closeApp
+
+    private void ClientGetParamedic(){
+        database = FirebaseDatabase.getInstance().getReference().child("paramedics");
+
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot paramedInfo:dataSnapshot.getChildren()){
+                    if(paramedInfo.child("status").getValue().toString().equals("active")){
+                        String activeParamed = new String();
+                        activeParamed = paramedInfo.child("username").getValue().toString();
+                        Intent intent = new Intent(getApplicationContext(),videoChat_Activity.class);
+                        intent.putExtra("para_id",activeParamed);
+                        startActivity(intent);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

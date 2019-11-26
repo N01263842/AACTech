@@ -102,6 +102,11 @@ public class videoChat_Activity extends AppCompatActivity implements Connector.I
                             startActivity(intent);
                         }
 
+                        if(menuItem.getTitle().equals("Terms & Policy")){
+                            Intent intent = new Intent(videoChat_Activity.this,policy.class);
+                            startActivity(intent);
+                        }
+
 
 
                         return true;

@@ -106,6 +106,7 @@
     <string name="client_home_label">Clients Home Address:</string>
     <string name="ca_label">Emergency Location:</string>
 
+    <string name="policy">PARAMED</string>
 
 
 </resources>
