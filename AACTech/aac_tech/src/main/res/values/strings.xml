@@ -103,5 +103,9 @@
     <string name="alert_Message">Are you sure you want to EXIT?</string>
     <string name="clientInfo_title">UPDATE INFO</string>
 
+    <string name="client_home_label">Clients Home Address:</string>
+    <string name="ca_label">Emergency Location:</string>
+
+
 
 </resources>

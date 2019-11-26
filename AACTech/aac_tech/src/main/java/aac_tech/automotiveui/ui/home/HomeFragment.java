@@ -22,6 +22,7 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -50,6 +51,7 @@ import aac_tech.automotiveui.R;
 import aac_tech.automotiveui.UpdateInfo;
 import aac_tech.automotiveui.optionsNavigation;
 import aac_tech.automotiveui.paramedInfo;
+import aac_tech.automotiveui.paramedLogin;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -161,6 +163,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
+                database = FirebaseDatabase.getInstance().getReference().child("paramedics");
+
                     if (tb_state.isChecked()) {
                         tb_state.setBackgroundColor(Color.GREEN);
                         String status_act = new String("active");
@@ -175,6 +179,7 @@ public class HomeFragment extends Fragment {
                         database.child(info.get(5).toString()).child("status").setValue(updateInfo.getStatus());
                         database.child(info.get(5).toString()).child("date").setValue(updateInfo.getDate());
 
+
                     } else {
                         tb_state.setBackgroundColor(Color.RED);
                         String status_in = new String("inactive");
@@ -188,6 +193,7 @@ public class HomeFragment extends Fragment {
                         database.child(info.get(5).toString()).child("activity").setValue(updateInfo.getActivity());
                         database.child(info.get(5).toString()).child("status").setValue(updateInfo.getStatus());
                         database.child(info.get(5).toString()).child("date").setValue(updateInfo.getDate());
+
 
                     }
             }
@@ -294,15 +300,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-
-
-
-        return root;
-    }
-
-    @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -316,6 +313,7 @@ public class HomeFragment extends Fragment {
                             info.set(3, "active");
                         } else {
                             info.set(3, "inactive");
+                            Toast.makeText(getActivity(),"This is happening",Toast.LENGTH_LONG);
                         }
 
                         in_data[0] = 0;
@@ -324,16 +322,18 @@ public class HomeFragment extends Fragment {
                         intent.putStringArrayListExtra("info", info);
 
                         startActivity(intent);
+
                     }
                     else if (in_data[1] == 1) {
                         info.set(2, hospID);
                         in_data[1] = 0;
                         intent.putStringArrayListExtra("info", info);
                         startActivity(intent);
+
                     }
                 }
                 catch(NullPointerException npe){
-                   System.out.println("Something went wrong while refreshing the page");
+                    System.out.println("Something went wrong while refreshing the page");
 
                 }
             }
@@ -344,6 +344,17 @@ public class HomeFragment extends Fragment {
 
             }
         });
+
+
+
+
+
+        return root;
+    }
+
+    @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
 
 
     }
