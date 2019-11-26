@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">PARAMED</string>
     <string name="app_welcome">WELCOME</string>
+    <string name="app_welcome1">WELCOME TO PARMED</string>
     <string name="homescreenB1">paramedic</string>
     <string name="homescreenB2">client</string>
     <string name="patientB1">Call Now!</string>
@@ -101,6 +102,10 @@
     <string name="alert_title">WARNING</string>
     <string name="alert_Message">Are you sure you want to EXIT?</string>
     <string name="clientInfo_title">UPDATE INFO</string>
+
+    <string name="client_home_label">Clients Home Address:</string>
+    <string name="ca_label">Emergency Location:</string>
+
 
 
 </resources>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DisplayClientData">
+
+    <TextView
+        android:id="@+id/client_address_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ca_label"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.004" />
+
+    <FrameLayout
+        android:id="@+id/mymaps_home"
+        android:layout_width="411dp"
+        android:layout_height="361dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/min_map2"
+            android:layout_width="match_parent"
+            android:layout_height="201dp"
+            android:layout_marginTop="150dp" />
+
+        <TextView
+            android:id="@+id/emerg_address"
+            android:layout_width="match_parent"
+            android:layout_height="147dp"
+
+            android:background="@color/frame1"
+            android:text="@string/home_address" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/client_home_address"
+        android:layout_width="match_parent"
+        android:layout_height="179dp"
+
+        android:background="@color/spin_c"
+        android:text="@string/home_address"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/client_home_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/client_home_label"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.694" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
