@@ -27,6 +27,7 @@
         android:roundIcon="@mipmap/paramed_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".policy"></activity>
         <activity
             android:name=".DisplayClientData"
@@ -39,6 +40,17 @@
             android:name=".optionsNavigation"
             android:label="@string/title_activity_options_navigation"
             android:parentActivityName=".paramedLogin" />
+
+        <activity android:name=".Client_Address_Info">
+            <!-- Specifying the parent activity -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ClientParamedHome" />
+        </activity>
+        <activity android:name=".videoChat_Activity"/>
+        <activity
+            android:name=".optionsNavigation"
+            android:label="@string/title_activity_options_navigation" />
         <activity android:name=".paramedActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -55,10 +67,15 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
+
         <activity
             android:name=".paramedLogin"
             android:parentActivityName=".ClientParamedHome" />
         <activity android:name=".client_Activity" />
+
+            <!-- Specifying the parent activity -->
+
+
         <activity android:name=".ClientParamedHome" />
         <activity android:name=".SplashScreen">
             <intent-filter>
