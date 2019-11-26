@@ -8,10 +8,10 @@
     <string name="homescreenI1"></string>
     <string name="homescreenI2"></string>
     <string name="patientI1"></string>
-    <string name="home_address">L'adresse de la carte sera affichée ici</string>
-    <string name="parmadicscreenT1">En attente d'un appel!</string>
+    <string name="home_address">L\'adresse de la carte sera affichée ici</string>
+    <string name="parmadicscreenT1">En attente d\'un appel!</string>
     <string name="paramedSignIn">Connexion du paramédic:</string>
-    <string name="username">Saisissez votre nom d'utilisateur</string>
+    <string name="username">Saisissez votre nom d\'utilisateur</string>
     <string name="password">Entrer votre mot de passe</string>
     <string name="welcome">BIENVENUE A PARMED!</string>
     <string name="signin">Se connecter</string>
@@ -73,13 +73,13 @@
     <string name="title_notifications">les clients</string>
     <string name="signout">Déconnexion</string>
     <string name="update">Mettre a jour vos Info</string>
-    <string name="activity">Voir l'activité</string>
+    <string name="activity">Voir l\'activité</string>
     <string name="settings">Paramètres</string>
     <string name="mymenu">MENU</string>
     <string name="start">Commencer</string>
     <string name="connect">Relier</string>
     <string name="disconnect">Déconnecter</string>
-    <string name="client">Nom d'utilisateur</string>
+    <string name="client">Nom d\'utilisateur</string>
     <string name="emergency">Urgence</string>
     <string name="emerg_address">Address</string>
     <string name="client_address">Adresse du client</string>
@@ -104,5 +104,5 @@
     <string name="clientInfo_title">Mettre a jour vos informations</string>
 
     <string name="client_home_label">Adresse du client:</string>
-    <string name="ca_label">Lieu d'urgence:</string>
+    <string name="ca_label">Lieu d\'urgence:</string>
 </resources>
