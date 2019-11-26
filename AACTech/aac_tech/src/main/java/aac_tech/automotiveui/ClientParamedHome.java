@@ -98,7 +98,7 @@ public class ClientParamedHome extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.alert_title);
         builder.setMessage(alertText)
-                .setPositiveButton("Yes", mClickListener)
-                .setNegativeButton("No", mClickListener).show();
+                .setPositiveButton(R.string.positiveChoice, mClickListener)
+                .setNegativeButton(R.string.negetiveChoice, mClickListener).show();
     }//End of closeApp
 }

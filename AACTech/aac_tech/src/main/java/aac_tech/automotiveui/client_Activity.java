@@ -14,8 +14,7 @@ import android.widget.EditText;
 
 public class client_Activity extends AppCompatActivity {
 
-    private EditText city, zip, street, phone, province;
-    private Button submit_b;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,19 +33,7 @@ public class client_Activity extends AppCompatActivity {
             }
         });
 
-        city = (EditText)findViewById(R.id.city);
-        zip = (EditText)findViewById(R.id.zip);
-        street = (EditText)findViewById(R.id.street);
-        phone = (EditText)findViewById(R.id.phone);
-        province = (EditText)findViewById(R.id.province);
-        submit_b =(Button)findViewById(R.id.submit_b);
 
-        submit_b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
     }
 }
