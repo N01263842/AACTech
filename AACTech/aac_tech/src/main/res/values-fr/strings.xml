@@ -105,4 +105,6 @@
 
     <string name="client_home_label">Adresse du client:</string>
     <string name="ca_label">Lieu d\'urgence:</string>
+    <string name="positiveChoice">Oui</string>
+    <string name="negetiveChoice">Non</string>
 </resources>
