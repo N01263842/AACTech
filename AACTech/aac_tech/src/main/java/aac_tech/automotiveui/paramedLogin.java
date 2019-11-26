@@ -108,6 +108,7 @@ public class paramedLogin extends AppCompatActivity {
                             Intent intent = new Intent(paramedLogin.this, optionsNavigation.class);
                             intent.putStringArrayListExtra("info",paraInfo);
                             startActivity(intent);
+
                         } else {
                             Toast toast = Toast.makeText(paramedLogin.this, "Incorrect password!", Toast.LENGTH_LONG);
                             toast.show();
