@@ -55,6 +55,7 @@
         <activity android:name=".paramedLogin"
                   android:parentActivityName=".ClientParamedHome"/>
 
+        <activity android:name=".client_Activity" />
         <activity android:name=".ClientParamedHome" />
         <activity android:name=".SplashScreen">
             <intent-filter>
