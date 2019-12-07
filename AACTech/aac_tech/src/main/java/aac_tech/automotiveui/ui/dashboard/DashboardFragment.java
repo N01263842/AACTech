@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -42,14 +44,18 @@ public class DashboardFragment extends Fragment {
     private ArrayList info;
     private Resources res;
     private MapView mMapView;
+    private ArrayAdapter ad_spin;
+    private String [] hosp_list;
+    private String [] hosp1, hosp2, hosp3, hosp4, hosp5;
 
 
     private SupportMapFragment mapFragment;
+    private Spinner hospital;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.map_content, container, false);
+        View root = inflater.inflate(R.layout.paramed_maps, container, false);
 
 
         Intent intent = getActivity().getIntent();
@@ -58,10 +64,11 @@ public class DashboardFragment extends Fragment {
         res = getResources();
 
 
-      //  dashboardViewModel =
-          //      ViewModelProviders.of(this).get(DashboardViewModel.class);
+        mMapView= (MapView) root.findViewById(R.id.mapView2);
+        hospital = (Spinner)root.findViewById(R.id.hosp_spin);
 
-        mMapView= (MapView) root.findViewById(R.id.mapView);
+        setupSpinner();
+
         mMapView.onCreate(savedInstanceState);
 
         mMapView.onResume();
@@ -80,11 +87,11 @@ public class DashboardFragment extends Fragment {
                 float lng = 0;
                 String title = new String();
 
-                String [] hosp1 = res.getStringArray(R.array.hosp1);
-                String [] hosp2 = res.getStringArray(R.array.hosp2);
-                String [] hosp3 = res.getStringArray(R.array.hosp3);
-                String [] hosp4 = res.getStringArray(R.array.hosp4);
-                String [] hosp5 = res.getStringArray(R.array.hosp5);
+               // String [] hosp1 = res.getStringArray(R.array.hosp1);
+                //String [] hosp2 = res.getStringArray(R.array.hosp2);
+                //String [] hosp3 = res.getStringArray(R.array.hosp3);
+               // String [] hosp4 = res.getStringArray(R.array.hosp4);
+               // String [] hosp5 = res.getStringArray(R.array.hosp5);
 
                 if(Integer.parseInt(String.valueOf(info.get(2))) == Integer.parseInt(hosp1[0])){
                      lat = Float.parseFloat(hosp1[1]);
@@ -145,6 +152,33 @@ public class DashboardFragment extends Fragment {
 
         return root;
     }
+
+    private void setupSpinner(){
+
+        //Get Hospital Information
+        hosp1 = res.getStringArray(R.array.hosp1);
+        hosp2 = res.getStringArray(R.array.hosp2);
+        hosp3 = res.getStringArray(R.array.hosp3);
+        hosp4 = res.getStringArray(R.array.hosp4);
+        hosp5 = res.getStringArray(R.array.hosp5);
+
+        hosp_list = new String[5];
+
+        //Add hospital names to array
+        hosp_list[0] = hosp1[3];
+        hosp_list[1] = hosp2[3];
+        hosp_list[2] = hosp3[3];
+        hosp_list[3] = hosp4[3];
+        hosp_list[4] = hosp5[3];
+
+        //Set up spinner with hospital names
+        ad_spin = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_dropdown_item,hosp_list);
+        hospital.setAdapter(ad_spin);
+
+
+
+    }
+
 
 
 

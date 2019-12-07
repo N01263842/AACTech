@@ -70,6 +70,27 @@
     <string name="title_activity_options_navigation">optionsNavigation</string>
     <string name="title_home">home</string>
     <string name="title_dashboard">maps</string>
+    <string name="loc_change">Change Your Location:</string>
+    <string name="name_dialog">For any inquires about your name, please notify the database administrator.</string>
+    <string name="hosp_dialog1">The hospital that you are currently stationed is:</string>
+    <string name="hosp_dialog2">Date of hospital selection:</string>
+    <string name="stat_dialog1">Your state is</string>
+    <string name="stat_dialog2">You have been</string>
+    <string name="stat_dialog3">hours,</string>
+    <string name="stat_dialog4">minutes,</string>
+    <string name="stat_dialog5">seconds.</string>
+    <string name="stat_dialog6">Standby for incoming calls.</string>
+    <string name="stat_dialog7">for</string>
+    <string name="stat_dialog8">days</string>
+    <string name="name_dialog2">Hi</string>
+    <string name="patient_txt">Patient Health Monitor:</string>
+    <string name="oxygen">Blood Oxygen Rate(SPO2):</string>
+    <string name="temperat">Temperature:</string>
+    <string name="heart">Heart Rate:</string>
+    <string name="spo2">SP02 Readings</string>
+    <string name="temp">Temperature Readings</string>
+    <string name="hrt">Heart Rate readings</string>
+    <string name="signout_dialog">Are you sure you would like to sign out?</string>
     <string name="title_notifications">clients</string>
     <string name="signout">Sign out</string>
     <string name="update">Update Info</string>
@@ -102,15 +123,23 @@
     <string name="alert_title">WARNING</string>
     <string name="alert_Message">Are you sure you want to EXIT?</string>
     <string name="clientInfo_title">UPDATE INFO</string>
+    <string name="patients_label">Your Patients:</string>
+    <string name="latest">Your Most Recent Patient:</string>
+    <string name="status_str">Status goes here</string>
+    <string name="patient_stat">Emergency Status:</string>
 
-    <string name="client_home_label">Clients Home Address:</string>
+    <string name="client_home_label">Patients Home Address:</string>
     <string name="ca_label">Emergency Location:</string>
 
     <string name="policy">PARAMED</string>
 
 
-
     <string name="positiveChoice">Yes</string>
     <string name="negetiveChoice">No</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hosp_inf">Hospital Info</string>
+    <string name="par_stat_men">Your Status</string>
+    <string name="title_activity_paramedic_video">ParamedicVideoActivity</string>
 
 </resources>
