@@ -6,8 +6,10 @@
  */
 package aac_tech.automotiveui;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,7 +25,7 @@ public class Client_Address_Info extends AppCompatActivity {
     private DatabaseReference database;
     Client_Address_DataBase cad;
 
-    private EditText city, zip, street, phone, province;
+    private EditText city, zip, street, phone, province, name;
     private Button submit_b;
     private Intent intent;
     @Override
@@ -43,6 +45,7 @@ public class Client_Address_Info extends AppCompatActivity {
         phone = (EditText)findViewById(R.id.phone);
         province = (EditText)findViewById(R.id.province);
         submit_b =(Button)findViewById(R.id.submit_b);
+        name = (EditText)findViewById(R.id.name_cl);
 
         intent = getIntent();
 
@@ -81,7 +84,7 @@ public class Client_Address_Info extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String para_id = intent.getStringExtra("para_id");
+                String para_id = intent.getStringExtra("paramedic");
 
                 database = FirebaseDatabase.getInstance().getReference().child("clients");
                 cad = new Client_Address_DataBase();
@@ -92,10 +95,33 @@ public class Client_Address_Info extends AppCompatActivity {
                 cad.setContact(phone.getText().toString());
                 cad.setCl_zip(zip.getText().toString());
                 cad.setPara_id(para_id);
+                cad.setTime();
+                cad.setEm_status("done");
+                cad.setHrate("pending");
+                cad.setSpo2("pending");
+                cad.setTemp("pending");
+                cad.setCl_name(name.getText().toString());
 
                 String database_id = database.push().getKey();
 
                 database.child(database_id).setValue(cad);
+
+                String showSuccess = new String();
+                showSuccess = getResources().getString(R.string.success_dialog);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(Client_Address_Info.this);
+                builder.setMessage(showSuccess);
+                builder.setCancelable(true);
+                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        dialogInterface.cancel();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
 
 
 

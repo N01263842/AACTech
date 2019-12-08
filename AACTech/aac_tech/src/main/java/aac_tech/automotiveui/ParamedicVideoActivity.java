@@ -40,7 +40,7 @@ public class ParamedicVideoActivity extends AppCompatActivity implements Connect
 
         ConnectorPkg.setApplicationUIContext(this);
         ConnectorPkg.initialize();
-        videoFrame = (FrameLayout)findViewById((R.id.videoFrame));
+        videoFrame = (FrameLayout)findViewById((R.id.videoFrame2));
 
         if (checkSelfPermission(android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{android.Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
@@ -73,7 +73,7 @@ public class ParamedicVideoActivity extends AppCompatActivity implements Connect
 
     public void Connect(View v){
 
-        String token = "cHJvdmlzaW9uAHVzZXIxQGI4YzcwMS52aWR5by5pbwA2MzczOTY4NzEyOAAAZTBjYTEyODcyZTJhYTQ1MTI1YjQ2YThmMGRhZGU5ODMxNjAwOTAyZGQ2ZGJiZDYwOGE4YTY5MzZkZGQ0MWUzZjE3ODI1Zjk5YmQ0ZDFiNGE5YjJlNWI0YzRkOWU0YWY4";
+        String token = "cHJvdmlzaW9uAHVzZXIxQGI4YzcwMS52aWR5by5pbwA2Mzc0MzAwNDk4MgAAODkxOTY2MTNmZThlZDZhNzEwNDhjYmUzZWRlZjYzYjNkNmQ3ZTY4NzgyNzIwMTk4OTZlNzk3MzExNzYwZWNiNjhmOTcwZTRkZGRlZWY4ZjNkNWEzOTQ5ZTFmN2JjYjdi";
         vc.connect("prod.vidyo.io",token,"DemoUser","DemoRoom",this);
     }
 

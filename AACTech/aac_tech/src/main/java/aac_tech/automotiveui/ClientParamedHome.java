@@ -125,8 +125,11 @@ public class ClientParamedHome extends AppCompatActivity {
                     if(paramedInfo.child("status").getValue().toString().equals("active")){
                         String activeParamed = new String();
                         activeParamed = paramedInfo.child("username").getValue().toString();
+                        String parent = new String();
+                        parent = paramedInfo.getKey();
                         Intent intent = new Intent(getApplicationContext(),videoChat_Activity.class);
                         intent.putExtra("para_id",activeParamed);
+                        intent.putExtra("parent",parent);
                         startActivity(intent);
 
                     }

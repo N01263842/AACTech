@@ -13,10 +13,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -24,6 +26,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import aac_tech.automotiveui.R;
+import aac_tech.automotiveui.UpdateInfo;
+import aac_tech.automotiveui.optionsNavigation;
+import aac_tech.automotiveui.paramedLogin;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -33,6 +39,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -47,6 +59,9 @@ public class DashboardFragment extends Fragment {
     private ArrayAdapter ad_spin;
     private String [] hosp_list;
     private String [] hosp1, hosp2, hosp3, hosp4, hosp5;
+    private DatabaseReference database;
+    private boolean skip;
+    private UpdateInfo updateHosp;
 
 
     private SupportMapFragment mapFragment;
@@ -58,20 +73,31 @@ public class DashboardFragment extends Fragment {
         View root = inflater.inflate(R.layout.paramed_maps, container, false);
 
 
-        Intent intent = getActivity().getIntent();
+       /* Intent intent = getActivity().getIntent();
 
         info = intent.getStringArrayListExtra("info");
         res = getResources();
 
 
         mMapView= (MapView) root.findViewById(R.id.mapView2);
-        hospital = (Spinner)root.findViewById(R.id.hosp_spin);
+        hospital = (Spinner)root.findViewById(R.id.hosp_spin);*/
 
-        setupSpinner();
+     //   mMapView.onCreate(savedInstanceState);
 
-        mMapView.onCreate(savedInstanceState);
+      //  mMapView.onResume();
 
-        mMapView.onResume();
+     //   setupSpinner();
+
+
+
+
+
+
+
+        return root;
+    }
+
+    public void setUpMaps(final int offset){
 
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
@@ -87,34 +113,28 @@ public class DashboardFragment extends Fragment {
                 float lng = 0;
                 String title = new String();
 
-               // String [] hosp1 = res.getStringArray(R.array.hosp1);
-                //String [] hosp2 = res.getStringArray(R.array.hosp2);
-                //String [] hosp3 = res.getStringArray(R.array.hosp3);
-               // String [] hosp4 = res.getStringArray(R.array.hosp4);
-               // String [] hosp5 = res.getStringArray(R.array.hosp5);
-
-                if(Integer.parseInt(String.valueOf(info.get(2))) == Integer.parseInt(hosp1[0])){
-                     lat = Float.parseFloat(hosp1[1]);
-                     lng = Float.parseFloat(hosp1[2]);
-                     title = hosp1[3];
+                if(offset == Integer.parseInt(hosp1[0])){
+                    lat = Float.parseFloat(hosp1[1]);
+                    lng = Float.parseFloat(hosp1[2]);
+                    title = hosp1[3];
 
                 }
-                else if(Integer.parseInt(String.valueOf(info.get(2))) == Integer.parseInt(hosp2[0])){
+                else if(offset == Integer.parseInt(hosp2[0])){
                     lat = Float.parseFloat(hosp2[1]);
                     lng = Float.parseFloat(hosp2[2]);
                     title = hosp2[3];
                 }
-                else if(Integer.parseInt(String.valueOf(info.get(2))) == Integer.parseInt(hosp3[0])){
+                else if(offset== Integer.parseInt(hosp3[0])){
                     lat = Float.parseFloat(hosp3[1]);
                     lng = Float.parseFloat(hosp3[2]);
                     title = hosp3[3];
                 }
-                else if(Integer.parseInt(String.valueOf(info.get(2))) == Integer.parseInt(hosp4[0])){
+                else if(offset == Integer.parseInt(hosp4[0])){
                     lat = Float.parseFloat(hosp4[1]);
                     lng = Float.parseFloat(hosp4[2]);
                     title = hosp4[3];
                 }
-                else if(Integer.parseInt(String.valueOf(info.get(2))) == Integer.parseInt(hosp5[0])){
+                else if(offset == Integer.parseInt(hosp5[0])){
                     lat = Float.parseFloat(hosp5[1]);
                     lng = Float.parseFloat(hosp5[2]);
                     title = hosp5[3];
@@ -148,13 +168,115 @@ public class DashboardFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
 
-        return root;
+        Intent intent = getActivity().getIntent();
+
+        info = intent.getStringArrayListExtra("info");
+        res = getResources();
+        skip = true;
+
+
+
+        mMapView= (MapView) view.findViewById(R.id.mapView2);
+        hospital = (Spinner)view.findViewById(R.id.hosp_spin);
+
+        mMapView.onCreate(savedInstanceState);
+
+        mMapView.onResume();
+
+        setupSpinner();
+
+        database = FirebaseDatabase.getInstance().getReference().child("paramedics");
+
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot paramed: dataSnapshot.getChildren()){
+                    if(paramed.child("username").getValue().toString().equals(info.get(1))){
+                        int hospID = Integer.parseInt(paramed.child("hospitalID").getValue().toString()) - 1;
+
+
+                        setSpinner(hospID);
+                        setUpMaps(hospID+1);
+
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        hospital.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String validate = new String();
+                updateHosp = new UpdateInfo();
+                int hospID = i + 1;
+                updateHosp.setHospID(hospID);
+
+                validate =getResources().getString(R.string.validate);
+                if(skip == false) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage(validate);
+                    builder.setCancelable(true);
+                    builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            updateHosp.updateHospital(info.get(5).toString());
+
+                            dialogInterface.cancel();
+                        }
+                    });
+
+                   builder.setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                       @Override
+                       public void onClick(DialogInterface dialogInterface, int i) {
+                           dialogInterface.cancel();
+                       }
+                   });
+
+
+
+
+                AlertDialog alert = builder.create();
+                alert.show();
+
+                }
+                else
+                    skip = false;
+            }
+
+
+
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void setSpinner(int offset){
+
+        hospital.setSelection(offset);
+
+
+
     }
 
     private void setupSpinner(){
-
         //Get Hospital Information
         hosp1 = res.getStringArray(R.array.hosp1);
         hosp2 = res.getStringArray(R.array.hosp2);
@@ -174,9 +296,6 @@ public class DashboardFragment extends Fragment {
         //Set up spinner with hospital names
         ad_spin = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_dropdown_item,hosp_list);
         hospital.setAdapter(ad_spin);
-
-
-
     }
 
 

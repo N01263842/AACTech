@@ -21,6 +21,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -32,16 +33,32 @@ public class videoChat_Activity extends AppCompatActivity implements Connector.I
     private static final int MY_INTERNET_REQUEST_CODE = 200;
     private static final int MY_AUDIO_REQUEST_CODE = 300;
     private DrawerLayout mDrawerLayout;
+  //  Button start, connect, disconnect;
+ //   Intent myInt;
+    String para_id;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_layout);
+   //     myInt = getIntent();
+   //     para_id = new String(myInt.getStringExtra("para_id"));
+
+        UpdateInfo upd = new UpdateInfo();
+
+
+
+      //  String parent = myInt.getStringExtra("parent");
+
+       // upd.sendRequest(parent);
+
+
 
         ConnectorPkg.setApplicationUIContext(this);
         ConnectorPkg.initialize();
         videoFrame = (FrameLayout)findViewById((R.id.videoFrame));
+
 
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
@@ -94,6 +111,7 @@ public class videoChat_Activity extends AppCompatActivity implements Connector.I
 
                         if(menuItem.getTitle().equals("Send Your Info")){
                             Intent intent = new Intent(videoChat_Activity.this,Client_Address_Info.class);
+                            intent.putExtra("paramedic",para_id);
                             startActivity(intent);
                         }
 
@@ -102,7 +120,7 @@ public class videoChat_Activity extends AppCompatActivity implements Connector.I
                             startActivity(intent);
                         }
 
-                        if(menuItem.getTitle().equals("Terms and Conditionds")){
+                        if(menuItem.getTitle().equals("Terms and Conditions")){
                             Intent intent = new Intent(videoChat_Activity.this,policy.class);
                             startActivity(intent);
                         }
@@ -163,7 +181,7 @@ public class videoChat_Activity extends AppCompatActivity implements Connector.I
 
     public void Connect(View v){
 
-        String token = "cHJvdmlzaW9uAHVzZXIxQGI4YzcwMS52aWR5by5pbwA2MzczOTY4NzEyOAAAZTBjYTEyODcyZTJhYTQ1MTI1YjQ2YThmMGRhZGU5ODMxNjAwOTAyZGQ2ZGJiZDYwOGE4YTY5MzZkZGQ0MWUzZjE3ODI1Zjk5YmQ0ZDFiNGE5YjJlNWI0YzRkOWU0YWY4";
+        String token = "cHJvdmlzaW9uAHVzZXIxQGI4YzcwMS52aWR5by5pbwA2Mzc0MzAwNDk4MgAAODkxOTY2MTNmZThlZDZhNzEwNDhjYmUzZWRlZjYzYjNkNmQ3ZTY4NzgyNzIwMTk4OTZlNzk3MzExNzYwZWNiNjhmOTcwZTRkZGRlZWY4ZjNkNWEzOTQ5ZTFmN2JjYjdi";
         vc.connect("prod.vidyo.io",token,"DemoUser","DemoRoom",this);
     }
 

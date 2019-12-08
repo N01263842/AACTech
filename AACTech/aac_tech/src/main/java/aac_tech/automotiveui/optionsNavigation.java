@@ -8,11 +8,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -30,6 +36,7 @@ public class optionsNavigation extends AppCompatActivity {
 //    private DrawerLayout mDrawerLayout;
     Resources res;
     private String [] hosp1, hosp2, hosp3, hosp4, hosp5;
+    DatabaseReference data;
 
 
 
@@ -51,8 +58,58 @@ public class optionsNavigation extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+        data = FirebaseDatabase.getInstance().getReference().child("paramedics");
+
+        data.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot video: dataSnapshot.getChildren()){
+                    if(video.child("video").getValue().toString().equals("yes")){
+                        requestDialog();
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
     //    mDrawerLayout = findViewById(R.id.drawer_layout);
+
+    }
+
+    public void requestDialog(){
+        String request = new String();
+        request = getResources().getString(R.string.request_dialog);
+        // Intent intent = getIntent();
+        // ArrayList myinfo = intent.getStringArrayListExtra("info");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(optionsNavigation.this);
+        builder.setMessage(request);
+        builder.setCancelable(true);
+        builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                dialogInterface.cancel();
+                Intent intent = new Intent(getApplicationContext(),ParamedicVideoActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        builder.setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
 
     }
 
@@ -80,25 +137,30 @@ public class optionsNavigation extends AppCompatActivity {
         return true;
     }
 
-    private void displaySignOutdialog(ArrayList<String> info){
+    private void displaySignOutdialog(final ArrayList<String> info){
         String instruct4 = new String();
         instruct4 = getResources().getString(R.string.signout_dialog);
+       // Intent intent = getIntent();
+       // ArrayList myinfo = intent.getStringArrayListExtra("info");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(optionsNavigation.this);
         builder.setMessage(instruct4);
         builder.setCancelable(true);
-        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
                 dialogInterface.cancel();
                 Intent intent = new Intent(getApplicationContext(),paramedLogin.class);
                 startActivity(intent);
+                UpdateInfo update = new UpdateInfo();
+
+                update.inactiveState(info.get(5).toString());
                 finish();
             }
         });
 
-        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
