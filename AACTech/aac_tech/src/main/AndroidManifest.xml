@@ -27,6 +27,8 @@
         android:roundIcon="@mipmap/paramed_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".policy"
+            android:parentActivityName=".videoChat_Activity"/>
         <activity
             android:name=".ParamedicVideoActivity"
             android:label="@string/title_activity_paramedic_video"

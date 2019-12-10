@@ -58,58 +58,9 @@ public class optionsNavigation extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        data = FirebaseDatabase.getInstance().getReference().child("paramedics");
-
-        data.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot video: dataSnapshot.getChildren()){
-                    if(video.child("video").getValue().toString().equals("yes")){
-                        requestDialog();
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
 
     //    mDrawerLayout = findViewById(R.id.drawer_layout);
-
-    }
-
-    public void requestDialog(){
-        String request = new String();
-        request = getResources().getString(R.string.request_dialog);
-        // Intent intent = getIntent();
-        // ArrayList myinfo = intent.getStringArrayListExtra("info");
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(optionsNavigation.this);
-        builder.setMessage(request);
-        builder.setCancelable(true);
-        builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-                dialogInterface.cancel();
-                Intent intent = new Intent(getApplicationContext(),ParamedicVideoActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        builder.setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-            }
-        });
-
-        AlertDialog alert = builder.create();
-        alert.show();
 
     }
 

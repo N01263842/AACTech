@@ -115,10 +115,10 @@ public class videoChat_Activity extends AppCompatActivity implements Connector.I
                             startActivity(intent);
                         }
 
-                        if(menuItem.getTitle().equals("Update Your Info")){
+                       /* if(menuItem.getTitle().equals("Update Your Info")){
                             Intent intent = new Intent(videoChat_Activity.this,Client_Address_Info.class);
                             startActivity(intent);
-                        }
+                        }*/
 
                         if(menuItem.getTitle().equals("Terms and Conditions")){
                             Intent intent = new Intent(videoChat_Activity.this,policy.class);
