@@ -105,7 +105,7 @@
     <string name="emergency">Urgence</string>
     <string name="emerg_address">Address</string>
     <string name="name_hint">Tapez votre nom ici</string>
-    <string name="request_dialog">Demande de chat. Cliquez sur \ 'oui \' pour démarrer le chat</string>
+    <string name="request_dialog">Demande de chat. Cliquez sur \'oui\' pour démarrer le chat</string>
     <string name="success_dialog">Vos informations ont été envoyées avec succès!</string>
     <string name="client_address">Adresse du client</string>
     <string name="client_contact">Numéro de téléphone du client</string>
