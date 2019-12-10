@@ -136,18 +136,15 @@
 
     <string name="client_home_label">Patients Home Address:</string>
     <string name="ca_label">Emergency Location:</string>
-
     <string name="policy">PARAMED</string>
-
 
     <string name="positiveChoice">Yes</string>
     <string name="negetiveChoice">No</string>
-
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hosp_inf">Hospital Info</string>
     <string name="par_stat_men">Your Status</string>
     <string name="title_activity_paramedic_video">ParamedicVideoActivity</string>
-    <string name="phone_warning">Please enter a valied phone number</string>
+    <string name="phone_warning">Please enter a valid phone number</string>
     <string name="field_warning">All fields are required</string>
     <string name="pattern_warning">Values do not match expected pattern</string>
 
