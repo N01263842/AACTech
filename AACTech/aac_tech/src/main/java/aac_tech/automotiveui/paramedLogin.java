@@ -51,11 +51,11 @@ public class paramedLogin extends AppCompatActivity {
                 String password = passwd.getText().toString();
 
                 if (username.equals("") || password.equals("")) {
-                    Toast toast = Toast.makeText(paramedLogin.this, "All fields are required", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(paramedLogin.this, R.string.field_warning, Toast.LENGTH_LONG);
                     toast.show();
                 }
                 else if(!isValidUName(username) || !isValidPassword(password)){
-                    Toast toast = Toast.makeText(paramedLogin.this, "Values do not match expected pattern", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(paramedLogin.this, R.string.pattern_warning, Toast.LENGTH_LONG);
                     toast.show();
                 }
                 else {
