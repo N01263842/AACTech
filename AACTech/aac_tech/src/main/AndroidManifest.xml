@@ -27,15 +27,21 @@
         android:roundIcon="@mipmap/paramed_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DisplayClientData"
-            android:parentActivityName=".optionsNavigation"/>
+        <activity
+            android:name=".ParamedicVideoActivity"
+            android:label="@string/title_activity_paramedic_video"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".DisplayClientData"
+            android:parentActivityName=".optionsNavigation" />
         <activity android:name=".Client_Address_Info" />
-        <activity android:name=".videoChat_Activity"
-            android:parentActivityName=".ClientParamedHome"/>
+        <activity
+            android:name=".videoChat_Activity"
+            android:parentActivityName=".ClientParamedHome" />
         <activity
             android:name=".optionsNavigation"
             android:label="@string/title_activity_options_navigation"
-            android:parentActivityName=".paramedLogin"/>
+            android:parentActivityName=".paramedLogin" />
         <activity android:name=".paramedActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -52,9 +58,9 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".paramedLogin"
-            android:parentActivityName=".ClientParamedHome"/>
-
+        <activity
+            android:name=".paramedLogin"
+            android:parentActivityName=".ClientParamedHome" />
         <activity android:name=".ClientParamedHome" />
         <activity android:name=".SplashScreen">
             <intent-filter>

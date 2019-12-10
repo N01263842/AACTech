@@ -8,12 +8,7 @@
         <item name="colorAccent">@color/Button</item>
         <item name="android:windowBackground">@color/background</item>
 
-       <!-- <item name="android:textSize">50sp</item>-->
-
-
-
-
-
+        <!-- <item name="android:textSize">50sp</item>-->
 
 
     </style>
@@ -21,6 +16,15 @@
     <style name="custom_bar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/spin_c</item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
 </resources>

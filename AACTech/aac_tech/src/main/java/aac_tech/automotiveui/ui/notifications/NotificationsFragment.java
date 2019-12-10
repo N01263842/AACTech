@@ -5,6 +5,7 @@
 package aac_tech.automotiveui.ui.notifications;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -40,65 +41,109 @@ import com.vidyo.VidyoClient.Connector.ConnectorPkg;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.EventListener;
 
 import aac_tech.automotiveui.DisplayClientData;
 import aac_tech.automotiveui.R;
+import aac_tech.automotiveui.UpdateInfo;
 import aac_tech.automotiveui.optionsNavigation;
 
-public class NotificationsFragment extends Fragment {
+import static androidx.core.content.ContextCompat.checkSelfPermission;
 
-    private NotificationsViewModel notificationsViewModel;
+public class NotificationsFragment extends Fragment{
+    private TextView status, temp, oxygen, heart_r, home_addr;
     private DatabaseReference database;
-    private ArrayList client_names, client_status;
-    private ListView client_list;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                ViewModelProviders.of(this).get(NotificationsViewModel.class);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.activity_paramed, container, false);
-
-
-
         return root;
     }
 
-    @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        client_list = (ListView)view.findViewById(R.id.list_client);
+        status = (TextView)view.findViewById(R.id.patient_stat);
+        temp = (TextView)view.findViewById(R.id.temperat);
+        oxygen =(TextView)view.findViewById(R.id.oxygen);
+        heart_r = (TextView)view.findViewById(R.id.heart);
+        home_addr = (TextView)view.findViewById(R.id.client_home_address);
 
 
-        client_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                 Intent intent = new Intent(getActivity(), DisplayClientData.class);
-                 intent.putExtra("client",client_names.get(i).toString());
-                 startActivity(intent);
-            }
-        });
-
-                database = FirebaseDatabase.getInstance().getReference().child("clients");
+        database = FirebaseDatabase.getInstance().getReference().child("clients");
 
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                client_names = new ArrayList();
-                client_status = new ArrayList();
+
+
+                long time = 0;
+                String street = null;
+                String city = null;
+                String zip = null;
+                String province = null;
+                String contact = null;
+                String em_status = null;
+                String display_home_address = null;
+                String mytemp = null;
+                String spo2 = null;
+                String hrate = null;
+                String client_name = null;
+
 
                 for(DataSnapshot clientData: dataSnapshot.getChildren()){
-                    client_names.add(clientData.child("cl_name").getValue().toString());
-                    client_status.add(clientData.child("em_status").getValue().toString());
+
+                    if(time < Long.parseLong(clientData.child("time").getValue().toString())){
+
+                        time = Long.parseLong(clientData.child("time").getValue().toString());
+
+                        street = new String();
+                        city = new String();
+                        zip = new String();
+                        province = new String();
+                        contact = new String();
+                        em_status = new String();
+                        display_home_address = new String();
+                        mytemp = new String();
+                        spo2 = new String();
+                        hrate = new String();
+                        client_name = new String();
+
+
+                        street = clientData.child("cl_street").getValue().toString();
+                        city = clientData.child("cl_city").getValue().toString();
+                        zip = clientData.child("cl_zip").getValue().toString();
+                        province = clientData.child("cl_province").getValue().toString();
+                        contact = clientData.child("contact").getValue().toString();
+                        em_status = clientData.child("em_status").getValue().toString();
+                        mytemp = clientData.child("temp").getValue().toString();
+                        hrate = clientData.child("hrate").getValue().toString();
+                        spo2 = clientData.child("spo2").getValue().toString();
+                        client_name = clientData.child("cl_name").getValue().toString();
+
+
+
+
+
+
+                    }
                 }
 
-                if(client_names.size() > 0 && client_status.size() > 0){
-                    CustomAdapter customAdapter = new CustomAdapter();
-                    client_list.setAdapter(customAdapter);
+                display_home_address = "Client name :  "+client_name+
+                        "\nContact     :  "+contact+
+                        "\nEMG Status  :  "+em_status+
+                        "\n\nStreet      :  "+street+
+                        "\nCity        :  "+city+
+                        "\nZIP         :  "+zip+
+                        "\nprovince    :  "+province;
 
-                }
+                home_addr.setText(display_home_address);
+                oxygen.setText(spo2);
+                temp.setText(mytemp);
+                heart_r.setText(hrate);
             }
-
-
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -107,46 +152,8 @@ public class NotificationsFragment extends Fragment {
         });
 
 
+
+
+
     }
-
-
-    class CustomAdapter extends BaseAdapter{
-
-        @Override
-        public int getCount() {
-            return client_names.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            view = getLayoutInflater().inflate(R.layout.custom_list,null);
-
-            TextView cl_name = (TextView)view.findViewById(R.id.client_name);
-            TextView cl_status = (TextView)view.findViewById(R.id.em_status);
-
-            cl_name.setText(client_names.get(i).toString());
-            cl_status.setText(client_status.get(i).toString());
-
-            if(client_status.get(i).toString().equals("done")) {
-                cl_status.setTextColor(Color.GREEN);
-            }
-            else cl_status.setTextColor(Color.RED);
-
-
-            return view;
-        }
-    }
-
-
-
 }

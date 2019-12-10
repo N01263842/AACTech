@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/hosp_inf"
+        app:showAsAction="never"
+        android:title="@string/hosp_inf" />
+    <item
+        android:id="@+id/signout"
+        app:showAsAction="ifRoom"
+        android:title="@string/signout" />
+    <item
+        android:id="@+id/par_stat"
+        android:title="@string/par_stat_men"
+        app:showAsAction="never"/>
+</menu>

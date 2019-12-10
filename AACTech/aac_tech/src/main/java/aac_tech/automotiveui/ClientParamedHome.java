@@ -1,16 +1,20 @@
 package aac_tech.automotiveui;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 public class ClientParamedHome extends AppCompatActivity {
 
     private DatabaseReference database;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,8 +125,11 @@ public class ClientParamedHome extends AppCompatActivity {
                     if(paramedInfo.child("status").getValue().toString().equals("active")){
                         String activeParamed = new String();
                         activeParamed = paramedInfo.child("username").getValue().toString();
+                        String parent = new String();
+                        parent = paramedInfo.getKey();
                         Intent intent = new Intent(getApplicationContext(),videoChat_Activity.class);
                         intent.putExtra("para_id",activeParamed);
+                        intent.putExtra("parent",parent);
                         startActivity(intent);
 
                     }

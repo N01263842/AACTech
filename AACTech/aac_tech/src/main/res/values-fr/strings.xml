@@ -8,6 +8,33 @@
     <string name="homescreenI1"></string>
     <string name="homescreenI2"></string>
     <string name="patientI1"></string>
+    <string name="title_activity_paramedic_video">ParamedicVideoActivity</string>
+    <string name="spo2">SP02 Readings</string>
+    <string name="temp">Temperature Readings</string>
+    <string name="hrt">Heart Rate readings</string>
+    <string name="oxygen">Blood Oxygen Rate(SPO2):</string>
+    <string name="temperat">Temperature:</string>
+    <string name="heart">Heart Rate:</string>
+    <string name="patient_txt">Patient Health Monitor:</string>
+    <string name="stat_dialog8">days</string>
+    <string name="name_dialog2">Hi</string>
+    <string name="stat_dialog7">for</string>
+    <string name="patients_label">Your Patients:</string>
+    <string name="policy">PARAMED</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hosp_inf">Hospital Info</string>
+    <string name="par_stat_men">Your Status</string>
+    <string name="signout_dialog">Are you sure you would like to sign out?</string>
+    <string name="stat_dialog1">Your state is</string>
+    <string name="stat_dialog2">You have been</string>
+    <string name="stat_dialog3">hours,</string>
+    <string name="stat_dialog4">minutes,</string>
+    <string name="stat_dialog5">seconds.</string>
+    <string name="stat_dialog6">Standby for incoming calls.</string>
+    <string name="hosp_dialog1">The hospital that you are currently stationed is:</string>
+    <string name="hosp_dialog2">Date of hospital selection:</string>
+    <string name="loc_change">Change Your Location:</string>
+    <string name="name_dialog">For any inquires about your name, please notify the database administrator.</string>
     <string name="home_address">L\'adresse de la carte sera affichée ici</string>
     <string name="parmadicscreenT1">En attente d\'un appel!</string>
     <string name="paramedSignIn">Connexion du paramédic:</string>
@@ -70,7 +97,7 @@
     <string name="title_activity_options_navigation">optionsNavigation</string>
     <string name="title_home">Accueil</string>
     <string name="title_dashboard">les cartes</string>
-    <string name="title_notifications">les clients</string>
+    <string name="title_notifications">recent</string>
     <string name="signout">Déconnexion</string>
     <string name="update">Mettre a jour vos Info</string>
     <string name="activity">Voir l\'activité</string>
@@ -82,6 +109,9 @@
     <string name="client">Nom d\'utilisateur</string>
     <string name="emergency">Urgence</string>
     <string name="emerg_address">Address</string>
+    <string name="name_hint">Type your name here</string>
+    <string name="request_dialog">Request to chat. Click \'yes\' to start chat</string>
+    <string name="success_dialog">Your Info was sent successfully!</string>
     <string name="client_address">Adresse du client</string>
     <string name="client_contact">Numéro de téléphone du client</string>
     <string name="paraName">Nom:</string>
@@ -97,14 +127,21 @@
     <string name="City">Ville    :</string>
     <string name="ZIP">ZIP     :</string>
     <string name="street">Rue  :</string>
+    <string name="latest">Your Most Recent Patient:</string>
     <string name="contact">Contact:</string>
     <string name="province">Province:</string>
     <string name="alert_title">ATTENTION</string>
     <string name="alert_Message">Êtes-vous sûr de vouloir QUITTER?</string>
     <string name="clientInfo_title">Mettre a jour vos informations</string>
+    <string name="validate">Are you sure you would like to change your location?</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
 
-    <string name="client_home_label">Adresse du client:</string>
+
+    <string name="client_home_label">Patients Home Address:</string>
     <string name="ca_label">Lieu d\'urgence:</string>
     <string name="positiveChoice">Oui</string>
     <string name="negetiveChoice">Non</string>
+    <string name="status_str">Status goes here</string>
+    <string name="patient_stat">Emergency Status:</string>
 </resources>

@@ -4,6 +4,10 @@ package aac_tech.automotiveui;
 
 import com.google.firebase.database.DatabaseReference;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class Client_Address_DataBase {
 
     private String cl_city;
@@ -12,18 +16,67 @@ public class Client_Address_DataBase {
     private String contact;
     private String cl_province;
     private String para_id;
+    private String time;
+    private String cl_name;
+    private String em_status;
+    private String temp;
+    private String hrate;
+    private String spo2;
 
     public Client_Address_DataBase(){
 
     }
 
-    public Client_Address_DataBase(String cityName, String zipName, String streetName, String phoneName, String provinceName,String para_id) {
-        this.cl_city = cityName;
-        this.cl_zip = zipName;
-        this.cl_street = streetName;
-        this.contact = phoneName;
-        this.cl_province = provinceName;
-        this.para_id = para_id;
+    public void setTemp(String temp) {
+        this.temp = temp;
+    }
+
+    public void setHrate(String hrate) {
+        this.hrate = hrate;
+    }
+
+    public void setSpo2(String spo2) {
+        this.spo2 = spo2;
+    }
+
+    public String getTemp() {
+        return temp;
+    }
+
+    public String getHrate() {
+        return hrate;
+    }
+
+    public String getSpo2() {
+        return spo2;
+    }
+
+    public void setTime() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        long now = cal.getTimeInMillis();
+
+        this.time = String.valueOf(now);
+    }
+
+    public void setEm_status(String em_status) {
+        this.em_status = em_status;
+    }
+
+    public String getEm_status() {
+        return em_status;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public String getCl_name() {
+        return cl_name;
+    }
+
+    public void setCl_name(String name) {
+        this.cl_name = name;
     }
 
     public void setPara_id(String para_id) {
