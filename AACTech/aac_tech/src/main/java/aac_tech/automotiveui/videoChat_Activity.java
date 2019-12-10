@@ -125,14 +125,9 @@ public class videoChat_Activity extends AppCompatActivity implements Connector.I
                             startActivity(intent);
                         }
 
-
-
-
-
                         return true;
                     }
                 });
-
 
         mDrawerLayout.addDrawerListener(
                 new DrawerLayout.DrawerListener() {
@@ -158,24 +153,13 @@ public class videoChat_Activity extends AppCompatActivity implements Connector.I
                 }
         );
 
-
-
-
-
-
     }
 
-
-
     public void Start(View v){
-
-
 
         vc = new Connector(videoFrame, Connector.ConnectorViewStyle.VIDYO_CONNECTORVIEWSTYLE_Default,
                 15, "","",0);
         vc.showViewAt(videoFrame,0,0,videoFrame.getWidth(),videoFrame.getHeight());
-
-
 
     }
 

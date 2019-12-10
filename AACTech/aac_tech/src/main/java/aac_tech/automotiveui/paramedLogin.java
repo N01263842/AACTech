@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 
 public class paramedLogin extends AppCompatActivity {
@@ -32,17 +33,15 @@ public class paramedLogin extends AppCompatActivity {
    private EditText passwd;
    private int data_retrieved;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paramed_login);
 
-
         uname = (EditText)findViewById(R.id.uname);
         passwd = (EditText)findViewById(R.id.passwd);
-        Button signin = (Button)findViewById(R.id.signin);
 
+        Button signin = (Button)findViewById(R.id.signin);
 
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,14 +51,16 @@ public class paramedLogin extends AppCompatActivity {
                 String password = passwd.getText().toString();
 
                 if (username.equals("") || password.equals("")) {
-                    Toast toast = Toast.makeText(paramedLogin.this, "All fields are required", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(paramedLogin.this, R.string.field_warning, Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                else if(!isValidUName(username) || !isValidPassword(password)){
+                    Toast toast = Toast.makeText(paramedLogin.this, R.string.pattern_warning, Toast.LENGTH_LONG);
                     toast.show();
                 }
                 else {
                     getParamedicInfo();
                 }
-
-
             }
         });
 
@@ -133,5 +134,25 @@ public class paramedLogin extends AppCompatActivity {
 
             }
         });
+    }
+
+    //Validating the username pattern
+    boolean isValidUName(String username){
+        String nameRegex = "[a-zA-Z0-9\\\\._\\\\-]{3,}";
+
+        Pattern pat = Pattern.compile(nameRegex);
+        if (username == null)
+            return false;
+        return pat.matcher(username).matches();
+    }
+
+    //Validating the password pattern
+    boolean isValidPassword(String password){
+        String pwdRegex = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=\\S+$).{8,}$";
+
+        Pattern pat = Pattern.compile(pwdRegex);
+        if (password == null)
+            return false;
+        return pat.matcher(password).matches();
     }
 }
