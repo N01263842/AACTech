@@ -64,6 +64,8 @@ public class optionsNavigation extends AppCompatActivity {
 
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -104,9 +106,9 @@ public class optionsNavigation extends AppCompatActivity {
                 dialogInterface.cancel();
                 Intent intent = new Intent(getApplicationContext(),paramedLogin.class);
                 startActivity(intent);
-                UpdateInfo update = new UpdateInfo();
+             //   UpdateInfo update = new UpdateInfo();
 
-                update.inactiveState(info.get(5).toString());
+               // update.inactiveState(info.get(5).toString());
                 finish();
             }
         });
