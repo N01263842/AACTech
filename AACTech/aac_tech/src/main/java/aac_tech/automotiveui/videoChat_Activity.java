@@ -55,8 +55,8 @@ public class videoChat_Activity extends AppCompatActivity implements Connector.I
 
 
 
-        ConnectorPkg.setApplicationUIContext(this);
-        ConnectorPkg.initialize();
+      //  ConnectorPkg.setApplicationUIContext(this);
+    //    ConnectorPkg.initialize();
         videoFrame = (FrameLayout)findViewById((R.id.videoFrame));
 
 
