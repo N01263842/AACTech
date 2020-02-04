@@ -41,7 +41,11 @@ public class ClientParamedHome extends AppCompatActivity {
         final Button client = (Button)findViewById(R.id.homescreenB2);
 
 
-        paramedic.setOnClickListener(new View.OnClickListener() {
+        paramedic.setVisibility(View.GONE);
+        client.setVisibility(View.GONE);
+
+
+    /*   paramedic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ClientParamedHome.this,paramedLogin.class);
@@ -84,7 +88,34 @@ public class ClientParamedHome extends AppCompatActivity {
 
                 return false;
             }
-        });
+        });*/
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DialogInterface.OnClickListener mClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int chose) {
+                Intent intent;
+                switch (chose){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        intent = new Intent(ClientParamedHome.this, paramedLogin.class);
+                        startActivity(intent);
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        intent = new Intent(ClientParamedHome.this, videoChat_Activity.class);
+                        startActivity(intent);
+                        break;
+                }//End of switch
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.alert_title2);
+        builder.setMessage(getResources().getString(R.string.ident_msg))
+                .setPositiveButton(R.string.positiveChoice, mClickListener)
+                .setNegativeButton(R.string.negetiveChoice, mClickListener).show();
     }
 
     //Android softkey handling

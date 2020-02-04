@@ -30,10 +30,6 @@
         <activity android:name=".policy"
             android:parentActivityName=".videoChat_Activity"/>
         <activity
-            android:name=".ParamedicVideoActivity"
-            android:label="@string/title_activity_paramedic_video"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
             android:name=".DisplayClientData"
             android:parentActivityName=".optionsNavigation" />
         <activity android:name=".Client_Address_Info" />
