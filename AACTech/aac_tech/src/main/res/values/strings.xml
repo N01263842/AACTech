@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">PARAMED</string>
     <string name="app_welcome">WELCOME</string>
-    <string name="app_welcome1">WELCOME TO PARMED</string>
+    <string name="app_welcome1">WELCOME TO PARAMED</string>
     <string name="homescreenB1">paramedic</string>
     <string name="homescreenB2">client</string>
     <string name="patientB1">Call Now!</string>
