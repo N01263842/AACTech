@@ -8,6 +8,7 @@ package aac_tech.automotiveui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -58,6 +59,8 @@ public class videoChat_Activity extends AppCompatActivity
     private FrameLayout mSubscriberViewContainer;
     private Publisher mPublisher;
     private Subscriber mSubscriber;
+    //boolean subscriberCheck = false;
+    private Button disconnectSubscriber;
 
     private DrawerLayout mDrawerLayout;
   //  Button start, connect, disconnect;
@@ -83,8 +86,19 @@ public class videoChat_Activity extends AppCompatActivity
 
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
+        disconnectSubscriber = (Button)findViewById(R.id.disconnect);
+
+        disconnectSubscriber.setVisibility(View.GONE);
 
         requestPermissions();
+
+        disconnectSubscriber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSession.unsubscribe(mSubscriber); // Disconnects the patient
+                //mSession.disconnect();
+            }
+        });
 
          NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
@@ -173,6 +187,8 @@ public class videoChat_Activity extends AppCompatActivity
 
 
 
+
+
             // initialize and connect to the session
             // mSession = new Session.Builder(this, API_KEY, SESSION_ID).build();
             // mSession.setSessionListener(this);
@@ -191,17 +207,37 @@ public class videoChat_Activity extends AppCompatActivity
     public void onConnected(Session session) {
         Log.i(LOG_TAG, "Session Connected");
 
+
         mPublisher = new Publisher.Builder(this).build();
         mPublisher.setPublisherListener(this);
 
-        mPublisherViewContainer.addView(mPublisher.getView());
+      /*  if(subscriberCheck) {
+            mSubscriberViewContainer.removeAllViews();
 
-        if (mPublisher.getView() instanceof GLSurfaceView){
-            ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
+            mPublisherViewContainer.setVisibility(View.VISIBLE);
+
+            mPublisherViewContainer.addView(mPublisher.getView());
+
+            if (mPublisher.getView() instanceof GLSurfaceView) {
+                ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
+            }
         }
+        else{*/
+            mPublisherViewContainer.removeAllViews();
+
+            if(mPublisherViewContainer.getVisibility() == View.VISIBLE) mPublisherViewContainer.setVisibility(View.GONE);
+
+            mSubscriberViewContainer.addView(mPublisher.getView());
+
+            if (mPublisher.getView() instanceof GLSurfaceView) {
+                ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
+            }
+       // }
 
         mSession.publish(mPublisher);
     }
+
+
 
     @Override
     public void onDisconnected(Session session) {
@@ -211,11 +247,23 @@ public class videoChat_Activity extends AppCompatActivity
     @Override
     public void onStreamReceived(Session session, Stream stream) {
         Log.i(LOG_TAG, "Stream Received");
+        mSubscriberViewContainer.removeAllViews();
+        disconnectSubscriber.setVisibility(View.VISIBLE);
 
         if (mSubscriber == null) {
             mSubscriber = new Subscriber.Builder(this, stream).build();
             mSession.subscribe(mSubscriber);
             mSubscriberViewContainer.addView(mSubscriber.getView());
+        }
+
+
+
+        mPublisherViewContainer.setVisibility(View.VISIBLE);
+
+        mPublisherViewContainer.addView(mPublisher.getView());
+
+        if (mPublisher.getView() instanceof GLSurfaceView) {
+            ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
         }
     }
 
@@ -226,7 +274,21 @@ public class videoChat_Activity extends AppCompatActivity
         if (mSubscriber != null) {
             mSubscriber = null;
             mSubscriberViewContainer.removeAllViews();
+           // subscriberCheck = false;
+
         }
+
+       /* mPublisherViewContainer.removeAllViews();
+
+        if(mPublisherViewContainer.getVisibility() == View.VISIBLE) mPublisherViewContainer.setVisibility(View.GONE);
+
+        mSubscriberViewContainer.addView(mPublisher.getView());
+
+        if (mPublisher.getView() instanceof GLSurfaceView) {
+            ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
+        }*/
+
+
     }
 
     @Override
