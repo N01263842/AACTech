@@ -7,6 +7,7 @@ package aac_tech.automotiveui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
@@ -15,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -95,8 +97,7 @@ public class videoChat_Activity extends AppCompatActivity
         disconnectSubscriber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSession.unsubscribe(mSubscriber); // Disconnects the patient
-                //mSession.disconnect();
+                disconnectDialog();
             }
         });
 
@@ -169,6 +170,30 @@ public class videoChat_Activity extends AppCompatActivity
         );
 
     }
+
+    private void disconnectDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(videoChat_Activity.this);
+        builder.setMessage("Disconnecting with Patient. Click 'OK' to continue");
+        builder.setCancelable(false);
+        builder.setPositiveButton(getResources().getString(R.string.OK), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                dialogInterface.cancel();
+                mSession.unsubscribe(mSubscriber); // Disconnects the patient
+                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

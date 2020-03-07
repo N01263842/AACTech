@@ -10,6 +10,7 @@
     <string name="patientI1"></string>
     <string name="alert_title2">IDENTITY CHECK</string>
     <string name="ident_msg">Are you a Paramedic?</string>
+    <string name="OK">OK</string>
     <string name="home_address">Map address will be displayed here</string>
     <string name="parmadicscreenT1">Waiting for a call!</string>
     <string name="paramedSignIn">Paramedic Sign in:</string>
