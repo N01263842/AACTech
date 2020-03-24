@@ -30,7 +30,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+
+import static java.lang.Long.parseLong;
 
 public class optionsNavigation extends AppCompatActivity {
 //    private DrawerLayout mDrawerLayout;
@@ -130,12 +133,12 @@ public class optionsNavigation extends AppCompatActivity {
                 dialogInterface.cancel();
                 Intent intent = new Intent(getApplicationContext(),paramedLogin.class);
 
-                intent.putExtra("sign_out",info.get(5).toString());
+               // intent.putExtra("sign_out",info.get(5).toString());
                // database.child(myinfo.get(5).toString()).child("status").setValue("inactive");
                 startActivity(intent);
-               // UpdateInfo update = new UpdateInfo();
+                UpdateInfo update = new UpdateInfo();
 
-                //update.inactiveState(info.get(5).toString());
+                update.inactiveState(info.get(5).toString());
                 finish();
             }
         });
@@ -153,7 +156,7 @@ public class optionsNavigation extends AppCompatActivity {
     }
 
     private void displayStateDialog(ArrayList<String> info){
-        long state_start = Long.parseLong(info.get(6).toString());
+        long state_start = Long.parseLong(info.get(6));
         Date date = new Date();
         long state_duration = date.getTime();
 

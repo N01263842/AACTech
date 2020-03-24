@@ -62,7 +62,7 @@ public class DashboardFragment extends Fragment {
     private DatabaseReference database;
     private boolean skip;
     private UpdateInfo updateHosp;
-
+    private Intent intent;
 
     private SupportMapFragment mapFragment;
     private Spinner hospital;
@@ -175,9 +175,9 @@ public class DashboardFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        Intent intent = getActivity().getIntent();
+        if(intent == null) intent = getActivity().getIntent();
 
-        info = intent.getStringArrayListExtra("info");
+        if(info == null) info = intent.getStringArrayListExtra("info");
         res = getResources();
         skip = true;
 
@@ -197,6 +197,10 @@ public class DashboardFragment extends Fragment {
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if(intent == null) intent = getActivity().getIntent();
+                if(info == null) info = intent.getStringArrayListExtra("info");
+
                 for(DataSnapshot paramed: dataSnapshot.getChildren()){
                     if(paramed.child("username").getValue().toString().equals(info.get(1))){
                         int hospID = Integer.parseInt(paramed.child("hospitalID").getValue().toString()) - 1;

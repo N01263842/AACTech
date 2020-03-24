@@ -20,7 +20,7 @@ public class UpdateInfo {
 
 
     public UpdateInfo(){
-
+        database = FirebaseDatabase.getInstance().getReference().child("paramedics");
     }
 
     public UpdateInfo(String date, String activity, String status) {
@@ -68,20 +68,20 @@ public class UpdateInfo {
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
         Date date = new Date(System.currentTimeMillis());
 
-        database = FirebaseDatabase.getInstance().getReference().child("paramedics");
+        //database = FirebaseDatabase.getInstance().getReference().child("paramedics");
         database.child(par_block).child("hospitalID").setValue(getHospID());
         database.child(par_block).child("date").setValue(formatter.format(date));
     }
 
     public void inactiveState(String par_block){
 
-        database = FirebaseDatabase.getInstance().getReference().child("paramedics");
+       // database = FirebaseDatabase.getInstance().getReference().child("paramedics");
         database.child(par_block).child("status").setValue("inactive");
 
     }
 
     public void sendRequest(String par_block){
-        database = FirebaseDatabase.getInstance().getReference().child("paramedics");
+       // database = FirebaseDatabase.getInstance().getReference().child("paramedics");
         database.child(par_block).child("video").setValue("yes");
     }
 
