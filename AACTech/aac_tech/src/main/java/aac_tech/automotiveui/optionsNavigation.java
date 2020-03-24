@@ -36,8 +36,7 @@ public class optionsNavigation extends AppCompatActivity {
 //    private DrawerLayout mDrawerLayout;
     Resources res;
     private String [] hosp1, hosp2, hosp3, hosp4, hosp5;
-    DatabaseReference data;
-
+    private DatabaseReference database;
 
 
     @Override
@@ -46,6 +45,7 @@ public class optionsNavigation extends AppCompatActivity {
         setContentView(R.layout.activity_options_navigation);
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
+      //  database = FirebaseDatabase.getInstance().getReference().child("paramedics");
 
 
         // Passing each menu ID as a set of Ids because each
@@ -57,6 +57,32 @@ public class optionsNavigation extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        /*database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                client_names = new ArrayList();
+                client_status = new ArrayList();
+
+                for(DataSnapshot clientData: dataSnapshot.getChildren()){
+                    client_names.add(clientData.child("cl_name").getValue().toString());
+                    client_status.add(clientData.child("em_status").getValue().toString());
+                }
+
+                if(client_names.size() > 0 && client_status.size() > 0){
+                    CustomAdapter customAdapter = new CustomAdapter();
+                    client_list.setAdapter(customAdapter);
+
+                }
+            }
+
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });*/
 
 
 
@@ -93,8 +119,6 @@ public class optionsNavigation extends AppCompatActivity {
     private void displaySignOutdialog(final ArrayList<String> info){
         String instruct4 = new String();
         instruct4 = getResources().getString(R.string.signout_dialog);
-       // Intent intent = getIntent();
-       // ArrayList myinfo = intent.getStringArrayListExtra("info");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(optionsNavigation.this);
         builder.setMessage(instruct4);
@@ -105,10 +129,13 @@ public class optionsNavigation extends AppCompatActivity {
 
                 dialogInterface.cancel();
                 Intent intent = new Intent(getApplicationContext(),paramedLogin.class);
-                startActivity(intent);
-             //   UpdateInfo update = new UpdateInfo();
 
-               // update.inactiveState(info.get(5).toString());
+                intent.putExtra("sign_out",info.get(5).toString());
+               // database.child(myinfo.get(5).toString()).child("status").setValue("inactive");
+                startActivity(intent);
+               // UpdateInfo update = new UpdateInfo();
+
+                //update.inactiveState(info.get(5).toString());
                 finish();
             }
         });
@@ -205,6 +232,7 @@ public class optionsNavigation extends AppCompatActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
+
 
 
     private String [] getHospitals(){

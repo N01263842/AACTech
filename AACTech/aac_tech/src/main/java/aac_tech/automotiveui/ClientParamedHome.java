@@ -147,7 +147,7 @@ public class ClientParamedHome extends AppCompatActivity {
                 .setNegativeButton(R.string.negetiveChoice, mClickListener).show();
     }//End of closeApp
 
-    private void ClientGetParamedic(){
+    /*private void ClientGetParamedic(){
         database = FirebaseDatabase.getInstance().getReference().child("paramedics");
 
         database.addValueEventListener(new ValueEventListener() {
@@ -173,5 +173,5 @@ public class ClientParamedHome extends AppCompatActivity {
 
             }
         });
-    }
+    }*/
 }

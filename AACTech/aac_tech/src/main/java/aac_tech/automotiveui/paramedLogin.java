@@ -37,6 +37,8 @@ public class paramedLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paramed_login);
+        
+        database = FirebaseDatabase.getInstance().getReference().child("paramedics");
 
         uname = (EditText)findViewById(R.id.uname);
         passwd = (EditText)findViewById(R.id.passwd);
@@ -69,17 +71,31 @@ public class paramedLogin extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = getIntent();
+
+        if(intent.getStringExtra("sign_out") != null){
+            UpdateInfo update = new UpdateInfo();
+            String parent = intent.getStringExtra("sign_out");
+            update.inactiveState(parent);
+        }
+    }
+
     private void getParamedicInfo(){
 
         paraInfo = new ArrayList();
         par = new paramedInfo();
         data_retrieved = 0;
 
-        database = FirebaseDatabase.getInstance().getReference().child("paramedics");
+
 
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String pass = new String();
+                String parent = new String();
 
                 for(DataSnapshot paramedData : dataSnapshot.getChildren()){
                     String username = paramedData.child("username").getValue().toString();
@@ -87,14 +103,14 @@ public class paramedLogin extends AppCompatActivity {
                     if(username.equals(uname.getText().toString())){
 
                         String name = paramedData.child("name").getValue().toString();
-                        String pass = paramedData.child("pass").getValue().toString();
-                        String parent = paramedData.getKey();
+                        pass = paramedData.child("pass").getValue().toString();
+                        parent = paramedData.getKey();
 
                         par.setFullName(name);
                         par.setPasswd(pass);
                         par.setUsername(username);
 
-                        System.out.println("Just testing something");
+                        //System.out.println("Just testing something");
 
                         paraInfo.add(name);
                         paraInfo.add(username);
@@ -105,21 +121,30 @@ public class paramedLogin extends AppCompatActivity {
                         paraInfo.add(paramedData.child("activity").getValue().toString());
                         paraInfo.add(paramedData.child("date").getValue().toString());
 
-                        database.child(parent).child("status").setValue("active");
+                       // database.child(parent).child("status").setValue("active");
 
 
                         data_retrieved = 1;
 
-                        if(pass.equals(passwd.getText().toString())){
-                            Intent intent = new Intent(paramedLogin.this, optionsNavigation.class);
-                            intent.putStringArrayListExtra("info",paraInfo);
-                            startActivity(intent);
+                        break;
 
-                        } else {
-                            Toast toast = Toast.makeText(paramedLogin.this, "Incorrect password!", Toast.LENGTH_LONG);
-                            toast.show();
-                        }
+                    }
 
+                }
+
+                if(data_retrieved == 1) {
+
+                    if (pass.equals(passwd.getText().toString())) {
+                        Intent intent = new Intent(paramedLogin.this, optionsNavigation.class);
+                        intent.putStringArrayListExtra("info", paraInfo);
+                        database.child(parent).child("status").setValue("active");
+                        uname.setText("");
+                        passwd.setText("");
+                        startActivity(intent);
+
+                    } else {
+                        Toast toast = Toast.makeText(paramedLogin.this, "Incorrect password!", Toast.LENGTH_LONG);
+                        toast.show();
                     }
                 }
 
