@@ -95,7 +95,7 @@ public class paramedLogin extends AppCompatActivity {
                             String name = paramedData.child("name").getValue().toString();
                             pass = paramedData.child("pass").getValue().toString();
                             parent = paramedData.getKey();
-                            System.out.println("\n-------Parent: " + parent + "--------");
+                            
 
                             par.setFullName(name);
                             par.setPasswd(pass);
