@@ -96,6 +96,8 @@ public class Client_Address_Info extends AppCompatActivity {
                 cad.setHrate("pending");
                 cad.setSpo2("pending");
                 cad.setTemp("pending");
+                cad.setLoc_lat(0);
+                cad.setLoc_long(0);
                 cad.setCl_name(name.getText().toString());
 
                 String database_id = database.push().getKey();

@@ -92,40 +92,38 @@ public class NotificationsFragment extends Fragment{
 
 
                 for(DataSnapshot clientData: dataSnapshot.getChildren()){
+                    if(clientData.child("time").getValue() != null) {
 
-                    if(time < Long.parseLong(clientData.child("time").getValue().toString())){
+                        if (time < Long.parseLong(clientData.child("time").getValue().toString())) {
 
-                        time = Long.parseLong(clientData.child("time").getValue().toString());
+                            time = Long.parseLong(clientData.child("time").getValue().toString());
 
-                        street = new String();
-                        city = new String();
-                        zip = new String();
-                        province = new String();
-                        contact = new String();
-                        em_status = new String();
-                        display_home_address = new String();
-                        mytemp = new String();
-                        spo2 = new String();
-                        hrate = new String();
-                        client_name = new String();
-
-
-                        street = clientData.child("cl_street").getValue().toString();
-                        city = clientData.child("cl_city").getValue().toString();
-                        zip = clientData.child("cl_zip").getValue().toString();
-                        province = clientData.child("cl_province").getValue().toString();
-                        contact = clientData.child("contact").getValue().toString();
-                        em_status = clientData.child("em_status").getValue().toString();
-                        mytemp = clientData.child("temp").getValue().toString();
-                        hrate = clientData.child("hrate").getValue().toString();
-                        spo2 = clientData.child("spo2").getValue().toString();
-                        client_name = clientData.child("cl_name").getValue().toString();
+                            street = new String();
+                            city = new String();
+                            zip = new String();
+                            province = new String();
+                            contact = new String();
+                            em_status = new String();
+                            display_home_address = new String();
+                            mytemp = new String();
+                            spo2 = new String();
+                            hrate = new String();
+                            client_name = new String();
 
 
+                            street = clientData.child("cl_street").getValue().toString();
+                            city = clientData.child("cl_city").getValue().toString();
+                            zip = clientData.child("cl_zip").getValue().toString();
+                            province = clientData.child("cl_province").getValue().toString();
+                            contact = clientData.child("contact").getValue().toString();
+                            em_status = clientData.child("em_status").getValue().toString();
+                            mytemp = clientData.child("temp").getValue().toString();
+                            hrate = clientData.child("hrate").getValue().toString();
+                            spo2 = clientData.child("spo2").getValue().toString();
+                            client_name = clientData.child("cl_name").getValue().toString();
 
 
-
-
+                        }
                     }
                 }
 

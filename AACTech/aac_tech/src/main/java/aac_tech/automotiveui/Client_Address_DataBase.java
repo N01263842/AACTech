@@ -22,9 +22,27 @@ public class Client_Address_DataBase {
     private String temp;
     private String hrate;
     private String spo2;
+    private long loc_lat;
+    private long loc_long;
 
     public Client_Address_DataBase(){
 
+    }
+
+    public void setLoc_lat(long loc_lat) {
+        this.loc_lat = loc_lat;
+    }
+
+    public void setLoc_long(long loc_long) {
+        this.loc_long = loc_long;
+    }
+
+    public long getLoc_lat() {
+        return loc_lat;
+    }
+
+    public long getLoc_long() {
+        return loc_long;
     }
 
     public void setTemp(String temp) {

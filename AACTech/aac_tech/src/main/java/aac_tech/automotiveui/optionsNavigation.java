@@ -42,41 +42,43 @@ public class optionsNavigation extends AppCompatActivity {
     private DatabaseReference database;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options_navigation);
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
-      //  database = FirebaseDatabase.getInstance().getReference().child("paramedics");
+        database = FirebaseDatabase.getInstance().getReference().child("paramedics");
 
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
 
          AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
+                 R.id.navigation_home, R.id.navigation_notifications)
               .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        /*database.addValueEventListener(new ValueEventListener() {
+
+        database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                client_names = new ArrayList();
-                client_status = new ArrayList();
+                Intent intent = getIntent();
+
+                ArrayList<String> paraData = intent.getStringArrayListExtra("info");
 
                 for(DataSnapshot clientData: dataSnapshot.getChildren()){
-                    client_names.add(clientData.child("cl_name").getValue().toString());
-                    client_status.add(clientData.child("em_status").getValue().toString());
+                   if(clientData.child("username").getValue().toString().equals(paraData.get(1))){
+                       if(clientData.child("video").getValue().toString().equals("yes")){
+                           displayVideoChat(paraData);
+                       }
+                   }
                 }
 
-                if(client_names.size() > 0 && client_status.size() > 0){
-                    CustomAdapter customAdapter = new CustomAdapter();
-                    client_list.setAdapter(customAdapter);
 
-                }
             }
 
 
@@ -85,7 +87,7 @@ public class optionsNavigation extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });*/
+        });
 
 
 
@@ -117,6 +119,43 @@ public class optionsNavigation extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    private void displayVideoChat(final ArrayList<String> myinfo){
+        String instruct4 = new String();
+        instruct4 = "Incoming call from Patient...";
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(optionsNavigation.this);
+        builder.setMessage(instruct4);
+        builder.setCancelable(true);
+        builder.setPositiveButton("accept", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                dialogInterface.cancel();
+                Intent intent = new Intent(getApplicationContext(), videoChat_Activity.class);
+                intent.putStringArrayListExtra("info",myinfo);
+
+                // intent.putExtra("sign_out",info.get(5).toString());
+                database.child(myinfo.get(5).toString()).child("video").setValue("no");
+                database.child(myinfo.get(5).toString()).child("status").setValue("busy");
+
+                startActivity(intent);
+                //UpdateInfo update = new UpdateInfo();
+
+                // update.inactiveState(info.get(5).toString());
+                // finish();
+            }
+        }).setNegativeButton("decline", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private void displaySignOutdialog(final ArrayList<String> info){

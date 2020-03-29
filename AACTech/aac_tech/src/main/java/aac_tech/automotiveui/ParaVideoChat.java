@@ -6,7 +6,6 @@ package aac_tech.automotiveui;
 
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,17 +13,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.material.navigation.NavigationView;
 
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,11 +27,8 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 import android.util.Log;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.opentok.android.Session;
 import com.opentok.android.Stream;
 import com.opentok.android.Publisher;
@@ -62,9 +53,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class videoChat_Activity extends AppCompatActivity
-        implements Session.SessionListener,PublisherKit.PublisherListener, LocationListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class ParaVideoChat extends AppCompatActivity
+        implements Session.SessionListener,PublisherKit.PublisherListener {
     private static String API_KEY = "46476002";
     private static String SESSION_ID = "1_MX40NjQ3NjAwMn5-MTU4MDc4MTYyMjU3Nn5YbzZvV2pmRDBpZ3c1MS9uNmVyOGRRZFN-fg";
     private static String TOKEN = "T1==cGFydG5lcl9pZD00NjQ3NjAwMiZzaWc9MmM4MGFjOWM5MTdlOTE4M2YyMTNlMTcwZWI1OTJkZDQ3OWIxNzkwNjpzZXNzaW9uX2lkPTFfTVg0ME5qUTNOakF3TW41LU1UVTRNRGM0TVRZeU1qVTNObjVZYnpadlYycG1SREJwWjNjMU1TOXVObVZ5T0dSUlpGTi1mZyZjcmVhdGVfdGltZT0xNTgwNzgxNjQ2Jm5vbmNlPTAuMDU3ODE4NDEyMzY2ODkyNTYmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTU4MDc4NTI0NCZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ==";
@@ -78,46 +68,33 @@ public class videoChat_Activity extends AppCompatActivity
     private Subscriber mSubscriber;
     //boolean subscriberCheck = false;
     private Button disconnectSubscriber;
-    private DatabaseReference database, mdatabase;
-    private String clientKey;
-    private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
+    private DatabaseReference database;
 
     private DrawerLayout mDrawerLayout;
-  //  Button start, connect, disconnect;
- //   Intent myInt;
-     String para_id;
+    //  Button start, connect, disconnect;
+    //   Intent myInt;
+    String para_id;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.video_layout);
+        setContentView(R.layout.activity_para_video_chat);
+
+        database = FirebaseDatabase.getInstance().getReference().child("paramedics");
+        //UpdateInfo upd = new UpdateInfo();
 
 
-        UpdateInfo upd = new UpdateInfo();
+        // Toolbar toolbar = findViewById(R.id.toolbar);
+        //  setSupportActionBar(toolbar);
 
-
-
-
-       // Toolbar toolbar = findViewById(R.id.toolbar);
-      //  setSupportActionBar(toolbar);
-
-        ActionBar actionbar = getSupportActionBar();
+        /*ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
-
-        database = FirebaseDatabase.getInstance().getReference().child("clients");
-        mdatabase = FirebaseDatabase.getInstance().getReference().child("paramedics");
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);*/
 
 
-        clientKey = database.push().getKey();
-
-
-
-
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        disconnectSubscriber = (Button)findViewById(R.id.disconnect);
+        //mDrawerLayout = findViewById(R.id.drawer_layout);
+        disconnectSubscriber = (Button)findViewById(R.id.disconnect1);
 
         disconnectSubscriber.setVisibility(View.GONE);
 
@@ -126,96 +103,18 @@ public class videoChat_Activity extends AppCompatActivity
         disconnectSubscriber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                disconnectDialog();
+                Intent intent = getIntent();
+                ArrayList<String> minfo = intent.getStringArrayListExtra("info");
+                disconnectDialog(minfo);
             }
         });
 
-         NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-
-                        // set item as selected to persist highlight
-                        menuItem.setChecked(true);
-                        // close drawer when item is tapped
-                        mDrawerLayout.closeDrawers();
-
-
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
-                        //display in short period of time
-                          Toast.makeText(getApplicationContext(), menuItem.getTitle(),
-                                Toast.LENGTH_LONG).show();
-
-
-                        if(menuItem.getTitle().equals("Go to Maps")){
-                            Intent intent = new Intent(videoChat_Activity.this,MapsActivity.class);
-                            startActivity(intent);
-                        }
-
-                        if(menuItem.getTitle().equals("Send Your Info")){
-                            Intent intent = new Intent(videoChat_Activity.this,Client_Address_Info.class);
-                            intent.putExtra("paramedic",para_id);
-                            startActivity(intent);
-                        }
-
-                       /* if(menuItem.getTitle().equals("Update Your Info")){
-                            Intent intent = new Intent(videoChat_Activity.this,Client_Address_Info.class);
-                            startActivity(intent);
-                        }*/
-
-                        if(menuItem.getTitle().equals("Terms and Conditions")){
-                            Intent intent = new Intent(videoChat_Activity.this,policy.class);
-                            startActivity(intent);
-                        }
-
-                        return true;
-                    }
-                });
-
-        mDrawerLayout.addDrawerListener(
-                new DrawerLayout.DrawerListener() {
-                    @Override
-                    public void onDrawerSlide(View drawerView, float slideOffset) {
-                        // Respond when the drawer's position changes
-                    }
-
-                    @Override
-                    public void onDrawerOpened(View drawerView) {
-                        // Respond when the drawer is opened
-                    }
-
-                    @Override
-                    public void onDrawerClosed(View drawerView) {
-                        // Respond when the drawer is closed
-                    }
-
-                    @Override
-                    public void onDrawerStateChanged(int newState) {
-                        // Respond when the drawer motion state changes
-                    }
-                }
-        );
-
-
 
     }
 
-    public void sendCurrentLocation(Location loc){
-        Intent intent = getIntent();
-        ArrayList<String> paraData = intent.getStringArrayListExtra("para_id");
+    private void disconnectDialog(final ArrayList<String>info){
 
-        database.child(clientKey).child("loc_lat").setValue(loc.getLatitude());
-        database.child(clientKey).child("loc_long").setValue(loc.getLongitude());
-        mdatabase.child(paraData.get(1)).child("video").setValue("yes");
-
-
-    }
-
-
-    private void disconnectDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(videoChat_Activity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(ParaVideoChat.this);
         builder.setMessage("Disconnecting with Patient. Click 'OK' to continue");
         builder.setCancelable(false);
         builder.setPositiveButton(getResources().getString(R.string.OK), new DialogInterface.OnClickListener() {
@@ -225,6 +124,7 @@ public class videoChat_Activity extends AppCompatActivity
                 dialogInterface.cancel();
                 mSession.unsubscribe(mSubscriber); // Disconnects the patient
                 Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+
                 startActivity(intent);
             }
         });
@@ -250,8 +150,8 @@ public class videoChat_Activity extends AppCompatActivity
         String[] perms = { Manifest.permission.INTERNET, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO };
         if (EasyPermissions.hasPermissions(this, perms)) {
             // initialize view objects from your layout
-            mPublisherViewContainer = (FrameLayout)findViewById(R.id.publisher_container);
-            mSubscriberViewContainer = (FrameLayout)findViewById(R.id.subscriber_container);
+            mPublisherViewContainer = (FrameLayout)findViewById(R.id.publisher_container1);
+            mSubscriberViewContainer = (FrameLayout)findViewById(R.id.subscriber_container1);
 
 
 
@@ -291,16 +191,16 @@ public class videoChat_Activity extends AppCompatActivity
             }
         }
         else{*/
-         //   mPublisherViewContainer.removeAllViews();
+       // mPublisherViewContainer.removeAllViews();
 
-         //   if(mPublisherViewContainer.getVisibility() == View.VISIBLE) mPublisherViewContainer.setVisibility(View.GONE);
+       // if(mPublisherViewContainer.getVisibility() == View.VISIBLE) mPublisherViewContainer.setVisibility(View.GONE);
 
-            mPublisherViewContainer.addView(mPublisher.getView());
+        mPublisherViewContainer.addView(mPublisher.getView());
 
-            if (mPublisher.getView() instanceof GLSurfaceView) {
-                ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
-            }
-       // }
+        if (mPublisher.getView() instanceof GLSurfaceView) {
+            ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
+        }
+        // }
 
         mSession.publish(mPublisher);
     }
@@ -315,7 +215,7 @@ public class videoChat_Activity extends AppCompatActivity
     @Override
     public void onStreamReceived(Session session, Stream stream) {
         Log.i(LOG_TAG, "Stream Received");
-      //  mSubscriberViewContainer.removeAllViews();
+        //mSubscriberViewContainer.removeAllViews();
         disconnectSubscriber.setVisibility(View.VISIBLE);
 
         if (mSubscriber == null) {
@@ -326,11 +226,9 @@ public class videoChat_Activity extends AppCompatActivity
 
 
 
-    //    mPublisherViewContainer.setVisibility(View.VISIBLE);
+      /*  mPublisherViewContainer.setVisibility(View.VISIBLE);
 
-       // mPublisherViewContainer.removeAllViews();
-
-     /*   mPublisherViewContainer.addView(mPublisher.getView());
+        mPublisherViewContainer.addView(mPublisher.getView());
 
         if (mPublisher.getView() instanceof GLSurfaceView) {
             ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
@@ -344,7 +242,7 @@ public class videoChat_Activity extends AppCompatActivity
         if (mSubscriber != null) {
             mSubscriber = null;
             mSubscriberViewContainer.removeAllViews();
-           // subscriberCheck = false;
+            // subscriberCheck = false;
 
         }
 
@@ -400,8 +298,8 @@ public class videoChat_Activity extends AppCompatActivity
                     Log.i(LOG_TAG, "SESSION_ID: " + SESSION_ID);
                     Log.i(LOG_TAG, "TOKEN: " + TOKEN);
 
-                    mSession = new Session.Builder(videoChat_Activity.this, API_KEY, SESSION_ID).build();
-                    mSession.setSessionListener(videoChat_Activity.this);
+                    mSession = new Session.Builder(ParaVideoChat.this, API_KEY, SESSION_ID).build();
+                    mSession.setSessionListener(ParaVideoChat.this);
                     mSession.connect(TOKEN);
 
                 } catch (JSONException error) {
@@ -416,20 +314,8 @@ public class videoChat_Activity extends AppCompatActivity
         }));
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
-        }
-    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -439,44 +325,5 @@ public class videoChat_Activity extends AppCompatActivity
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        sendCurrentLocation(location);
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        if (mLastLocation != null) {
-            sendCurrentLocation(mLastLocation);
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 }

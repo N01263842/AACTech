@@ -109,8 +109,10 @@ public class HomeFragment extends Fragment {
                 client_status = new ArrayList();
 
                 for(DataSnapshot clientData: dataSnapshot.getChildren()){
-                    client_names.add(clientData.child("cl_name").getValue().toString());
-                    client_status.add(clientData.child("em_status").getValue().toString());
+                    if(clientData.child("cl_name").getValue() != null) {
+                        client_names.add(clientData.child("cl_name").getValue().toString());
+                        client_status.add(clientData.child("em_status").getValue().toString());
+                    }
                 }
 
                 if(client_names.size() > 0 && client_status.size() > 0){

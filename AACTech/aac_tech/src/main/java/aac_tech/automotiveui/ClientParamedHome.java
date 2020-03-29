@@ -23,6 +23,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /*
  * Team-Name: AAC-Tech
 
@@ -102,10 +105,11 @@ public class ClientParamedHome extends AppCompatActivity {
                     case DialogInterface.BUTTON_POSITIVE:
                         intent = new Intent(ClientParamedHome.this, paramedLogin.class);
                         startActivity(intent);
+
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
-                        intent = new Intent(ClientParamedHome.this, videoChat_Activity.class);
-                        startActivity(intent);
+                        //intent = new Intent(ClientParamedHome.this, videoChat_Activity.class);
+                        ClientGetParamedic();
                         break;
                 }//End of switch
             }
@@ -147,21 +151,23 @@ public class ClientParamedHome extends AppCompatActivity {
                 .setNegativeButton(R.string.negetiveChoice, mClickListener).show();
     }//End of closeApp
 
-    /*private void ClientGetParamedic(){
+    private void ClientGetParamedic(){
         database = FirebaseDatabase.getInstance().getReference().child("paramedics");
 
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> param = new ArrayList<String>();
+
                 for(DataSnapshot paramedInfo:dataSnapshot.getChildren()){
                     if(paramedInfo.child("status").getValue().toString().equals("active")){
-                        String activeParamed = new String();
-                        activeParamed = paramedInfo.child("username").getValue().toString();
-                        String parent = new String();
-                        parent = paramedInfo.getKey();
+                        //String activeParamed = new String();
+                        param.add(paramedInfo.child("username").getValue().toString());
+                        //String parent = new String();
+                        param.add(paramedInfo.getKey());
                         Intent intent = new Intent(getApplicationContext(),videoChat_Activity.class);
-                        intent.putExtra("para_id",activeParamed);
-                        intent.putExtra("parent",parent);
+                        intent.putStringArrayListExtra("para_id",param);
+                        //intent.putExtra("parent",parent);
                         startActivity(intent);
 
                     }
@@ -173,5 +179,5 @@ public class ClientParamedHome extends AppCompatActivity {
 
             }
         });
-    }*/
+    }
 }

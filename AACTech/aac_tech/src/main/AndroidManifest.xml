@@ -27,8 +27,10 @@
         android:roundIcon="@mipmap/paramed_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".policy"
-            android:parentActivityName=".videoChat_Activity"/>
+        <activity android:name=".ParaVideoChat"></activity>
+        <activity
+            android:name=".policy"
+            android:parentActivityName=".videoChat_Activity" />
         <activity
             android:name=".DisplayClientData"
             android:parentActivityName=".optionsNavigation" />
