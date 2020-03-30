@@ -20,6 +20,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -94,20 +96,20 @@ public class ParaVideoChat extends AppCompatActivity
 
 
         //mDrawerLayout = findViewById(R.id.drawer_layout);
-        disconnectSubscriber = (Button)findViewById(R.id.disconnect1);
+      //  disconnectSubscriber = (Button)findViewById(R.id.disconnect1);
 
        // disconnectSubscriber.setVisibility(View.GONE);
 
         requestPermissions();
 
-        disconnectSubscriber.setOnClickListener(new View.OnClickListener() {
+       /* disconnectSubscriber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = getIntent();
                 ArrayList<String> minfo = intent.getStringArrayListExtra("info");
                 disconnectDialog(minfo);
             }
-        });
+        });*/
 
 
     }
@@ -320,10 +322,24 @@ public class ParaVideoChat extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
+            case R.id.disconnect3:
+                Intent intent = getIntent();
+                ArrayList<String> minfo = intent.getStringArrayListExtra("info");
+                disconnectDialog(minfo);
+                break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.disc_menu, menu);
+
+        return true;
+    }
+
+
 }

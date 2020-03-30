@@ -167,7 +167,7 @@ public class ClientParamedHome extends AppCompatActivity {
 
                         param.add(paramedInfo.child("username").getValue().toString());
                         param.add(paramedInfo.getKey());
-                        Intent intent = new Intent(getApplicationContext(),videoChat_Activity.class);
+                        Intent intent = new Intent(getApplicationContext(),ParaVideoChat.class);
                         intent.putStringArrayListExtra("para_id",param);
                         startActivity(intent);
                         break;
