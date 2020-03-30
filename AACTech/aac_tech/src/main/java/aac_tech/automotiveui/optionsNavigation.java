@@ -134,12 +134,13 @@ public class optionsNavigation extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
 
                 dialogInterface.cancel();
-                Intent intent = new Intent(getApplicationContext(), videoChat_Activity.class);
+                Intent intent = new Intent(getApplicationContext(), ParaVideoChat.class);
                 intent.putStringArrayListExtra("info",myinfo);
 
                 // intent.putExtra("sign_out",info.get(5).toString());
-                database.child(myinfo.get(5).toString()).child("video").setValue("no");
+
                 database.child(myinfo.get(5).toString()).child("status").setValue("busy");
+                database.child(myinfo.get(5).toString()).child("video").setValue("no");
 
                 startActivity(intent);
                 //UpdateInfo update = new UpdateInfo();

@@ -40,6 +40,8 @@ public class ClientParamedHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_paramed_home);
 
+        database = FirebaseDatabase.getInstance().getReference().child("paramedics");
+
         final Button paramedic = (Button)findViewById(R.id.homescreenB1);
         final Button client = (Button)findViewById(R.id.homescreenB2);
 
@@ -152,7 +154,7 @@ public class ClientParamedHome extends AppCompatActivity {
     }//End of closeApp
 
     private void ClientGetParamedic(){
-        database = FirebaseDatabase.getInstance().getReference().child("paramedics");
+
 
         database.addValueEventListener(new ValueEventListener() {
             @Override
@@ -160,15 +162,15 @@ public class ClientParamedHome extends AppCompatActivity {
                 ArrayList<String> param = new ArrayList<String>();
 
                 for(DataSnapshot paramedInfo:dataSnapshot.getChildren()){
-                    if(paramedInfo.child("status").getValue().toString().equals("active")){
-                        //String activeParamed = new String();
+                    if(paramedInfo.child("status").getValue().toString().equals("active")
+                            && paramedInfo.child("video").getValue().toString().equals("no")){
+
                         param.add(paramedInfo.child("username").getValue().toString());
-                        //String parent = new String();
                         param.add(paramedInfo.getKey());
                         Intent intent = new Intent(getApplicationContext(),videoChat_Activity.class);
                         intent.putStringArrayListExtra("para_id",param);
-                        //intent.putExtra("parent",parent);
                         startActivity(intent);
+                        break;
 
                     }
                 }

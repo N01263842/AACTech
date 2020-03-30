@@ -96,7 +96,7 @@ public class ParaVideoChat extends AppCompatActivity
         //mDrawerLayout = findViewById(R.id.drawer_layout);
         disconnectSubscriber = (Button)findViewById(R.id.disconnect1);
 
-        disconnectSubscriber.setVisibility(View.GONE);
+       // disconnectSubscriber.setVisibility(View.GONE);
 
         requestPermissions();
 
@@ -216,7 +216,7 @@ public class ParaVideoChat extends AppCompatActivity
     public void onStreamReceived(Session session, Stream stream) {
         Log.i(LOG_TAG, "Stream Received");
         //mSubscriberViewContainer.removeAllViews();
-        disconnectSubscriber.setVisibility(View.VISIBLE);
+      //  disconnectSubscriber.setVisibility(View.VISIBLE);
 
         if (mSubscriber == null) {
             mSubscriber = new Subscriber.Builder(this, stream).build();

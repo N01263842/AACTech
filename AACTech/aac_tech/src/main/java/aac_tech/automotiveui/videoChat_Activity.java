@@ -63,8 +63,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class videoChat_Activity extends AppCompatActivity
-        implements Session.SessionListener,PublisherKit.PublisherListener, LocationListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+        implements Session.SessionListener,PublisherKit.PublisherListener{
     private static String API_KEY = "46476002";
     private static String SESSION_ID = "1_MX40NjQ3NjAwMn5-MTU4MDc4MTYyMjU3Nn5YbzZvV2pmRDBpZ3c1MS9uNmVyOGRRZFN-fg";
     private static String TOKEN = "T1==cGFydG5lcl9pZD00NjQ3NjAwMiZzaWc9MmM4MGFjOWM5MTdlOTE4M2YyMTNlMTcwZWI1OTJkZDQ3OWIxNzkwNjpzZXNzaW9uX2lkPTFfTVg0ME5qUTNOakF3TW41LU1UVTRNRGM0TVRZeU1qVTNObjVZYnpadlYycG1SREJwWjNjMU1TOXVObVZ5T0dSUlpGTi1mZyZjcmVhdGVfdGltZT0xNTgwNzgxNjQ2Jm5vbmNlPTAuMDU3ODE4NDEyMzY2ODkyNTYmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTU4MDc4NTI0NCZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ==";
@@ -77,7 +76,7 @@ public class videoChat_Activity extends AppCompatActivity
     private Publisher mPublisher;
     private Subscriber mSubscriber;
     //boolean subscriberCheck = false;
-    private Button disconnectSubscriber;
+  //  private Button disconnectSubscriber;
     private DatabaseReference database, mdatabase;
     private String clientKey;
     private GoogleApiClient mGoogleApiClient;
@@ -95,7 +94,7 @@ public class videoChat_Activity extends AppCompatActivity
         setContentView(R.layout.video_layout);
 
 
-        UpdateInfo upd = new UpdateInfo();
+        //UpdateInfo upd = new UpdateInfo();
 
 
 
@@ -107,28 +106,34 @@ public class videoChat_Activity extends AppCompatActivity
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-        database = FirebaseDatabase.getInstance().getReference().child("clients");
+      //  database = FirebaseDatabase.getInstance().getReference().child("clients");
         mdatabase = FirebaseDatabase.getInstance().getReference().child("paramedics");
 
 
-        clientKey = database.push().getKey();
+       // clientKey = database.push().getKey();
+
+        Intent intent = getIntent();
+        ArrayList<String> paraData = intent.getStringArrayListExtra("para_id");
+
+
+        mdatabase.child(paraData.get(1)).child("video").setValue("yes");
 
 
 
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
-        disconnectSubscriber = (Button)findViewById(R.id.disconnect);
+     //   disconnectSubscriber = (Button)findViewById(R.id.disconnect);
 
-        disconnectSubscriber.setVisibility(View.GONE);
+       // disconnectSubscriber.setVisibility(View.GONE);
 
         requestPermissions();
 
-        disconnectSubscriber.setOnClickListener(new View.OnClickListener() {
+      /*  disconnectSubscriber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 disconnectDialog();
             }
-        });
+        });*/
 
          NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
@@ -202,6 +207,7 @@ public class videoChat_Activity extends AppCompatActivity
 
     }
 
+/*
     public void sendCurrentLocation(Location loc){
         Intent intent = getIntent();
         ArrayList<String> paraData = intent.getStringArrayListExtra("para_id");
@@ -211,10 +217,10 @@ public class videoChat_Activity extends AppCompatActivity
         mdatabase.child(paraData.get(1)).child("video").setValue("yes");
 
 
-    }
+    }*/
 
 
-    private void disconnectDialog(){
+   /* private void disconnectDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(videoChat_Activity.this);
         builder.setMessage("Disconnecting with Patient. Click 'OK' to continue");
         builder.setCancelable(false);
@@ -235,7 +241,7 @@ public class videoChat_Activity extends AppCompatActivity
                 dialogInterface.cancel();
             }
         });
-    }
+    }*/
 
 
     @Override
@@ -279,28 +285,12 @@ public class videoChat_Activity extends AppCompatActivity
         mPublisher = new Publisher.Builder(this).build();
         mPublisher.setPublisherListener(this);
 
-      /*  if(subscriberCheck) {
-            mSubscriberViewContainer.removeAllViews();
-
-            mPublisherViewContainer.setVisibility(View.VISIBLE);
-
             mPublisherViewContainer.addView(mPublisher.getView());
 
             if (mPublisher.getView() instanceof GLSurfaceView) {
                 ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
             }
-        }
-        else{*/
-         //   mPublisherViewContainer.removeAllViews();
 
-         //   if(mPublisherViewContainer.getVisibility() == View.VISIBLE) mPublisherViewContainer.setVisibility(View.GONE);
-
-            mPublisherViewContainer.addView(mPublisher.getView());
-
-            if (mPublisher.getView() instanceof GLSurfaceView) {
-                ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
-            }
-       // }
 
         mSession.publish(mPublisher);
     }
@@ -315,8 +305,7 @@ public class videoChat_Activity extends AppCompatActivity
     @Override
     public void onStreamReceived(Session session, Stream stream) {
         Log.i(LOG_TAG, "Stream Received");
-      //  mSubscriberViewContainer.removeAllViews();
-        disconnectSubscriber.setVisibility(View.VISIBLE);
+
 
         if (mSubscriber == null) {
             mSubscriber = new Subscriber.Builder(this, stream).build();
@@ -324,17 +313,6 @@ public class videoChat_Activity extends AppCompatActivity
             mSubscriberViewContainer.addView(mSubscriber.getView());
         }
 
-
-
-    //    mPublisherViewContainer.setVisibility(View.VISIBLE);
-
-       // mPublisherViewContainer.removeAllViews();
-
-     /*   mPublisherViewContainer.addView(mPublisher.getView());
-
-        if (mPublisher.getView() instanceof GLSurfaceView) {
-            ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
-        }*/
     }
 
     @Override
@@ -344,20 +322,9 @@ public class videoChat_Activity extends AppCompatActivity
         if (mSubscriber != null) {
             mSubscriber = null;
             mSubscriberViewContainer.removeAllViews();
-           // subscriberCheck = false;
+
 
         }
-
-       /* mPublisherViewContainer.removeAllViews();
-
-        if(mPublisherViewContainer.getVisibility() == View.VISIBLE) mPublisherViewContainer.setVisibility(View.GONE);
-
-        mSubscriberViewContainer.addView(mPublisher.getView());
-
-        if (mPublisher.getView() instanceof GLSurfaceView) {
-            ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
-        }*/
-
 
     }
 
@@ -416,7 +383,7 @@ public class videoChat_Activity extends AppCompatActivity
         }));
     }
 
-    @Override
+   /* @Override
     protected void onResume() {
         super.onResume();
         if (mGoogleApiClient == null) {
@@ -429,7 +396,7 @@ public class videoChat_Activity extends AppCompatActivity
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -441,7 +408,7 @@ public class videoChat_Activity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
+    /*@Override
     public void onLocationChanged(Location location) {
         sendCurrentLocation(location);
     }
@@ -478,5 +445,5 @@ public class videoChat_Activity extends AppCompatActivity
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-    }
+    }*/
 }

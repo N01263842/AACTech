@@ -21,20 +21,6 @@
             android:id="@+id/cLayout"
             tools:context=".VideoChat_Activity">
 
-            <Button
-                android:id="@+id/disconnect"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="650dp"
-                android:layout_marginEnd="200dp"
-                android:background="@color/end"
-                android:text="Button"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/frameLayout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.6" />
-
             <FrameLayout
                 android:id="@+id/frameLayout"
                 android:layout_width="fill_parent"
