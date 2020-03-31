@@ -111,7 +111,7 @@ public class ParaVideoChat extends AppCompatActivity
                 mPublisherViewContainer.removeAllViews();
                 mSubscriberViewContainer.removeAllViews();
                 database.child(info.get(5)).child("video").setValue("no");
-                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                Intent intent = new Intent(getApplicationContext(),ParamedMaps.class);
                 intent.putStringArrayListExtra("info2", info);
 
                 startActivity(intent);

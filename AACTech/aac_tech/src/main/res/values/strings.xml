@@ -150,5 +150,6 @@
     <string name="phone_warning">Please enter a valid phone number</string>
     <string name="field_warning">All fields are required</string>
     <string name="pattern_warning">Values do not match expected pattern</string>
+    <string name="end">END</string>
 
 </resources>

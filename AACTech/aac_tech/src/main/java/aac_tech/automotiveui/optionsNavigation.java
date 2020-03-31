@@ -130,7 +130,7 @@ public class optionsNavigation extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(optionsNavigation.this);
         builder.setMessage(instruct4);
-        builder.setCancelable(true);
+        builder.setCancelable(false);
         builder.setPositiveButton("accept", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

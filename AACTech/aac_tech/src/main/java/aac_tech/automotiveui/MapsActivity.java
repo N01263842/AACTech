@@ -12,13 +12,23 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,12 +37,27 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
-        GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+import java.util.ArrayList;
+
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mMap;
-    protected GoogleApiClient mGoogleApiClient;
+    private Location mlastLocation;
+    private long lat, lng;
+    private Location lastLocation;
+    private ArrayList<String> data;
+    private DatabaseReference cl_database, database;
+    private ValueEventListener myValueEvent, myEvent;
+    private String clientkey;
+    private Client_Address_DataBase cad;
+    private LocationManager locationManager;
 
 
     @Override
@@ -41,11 +66,91 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
+        Intent intent = getIntent();
+        data = intent.getStringArrayListExtra("para");
+        cl_database = FirebaseDatabase.getInstance().getReference().child("clients");
+        database = FirebaseDatabase.getInstance().getReference().child("paramedics");
+
+        startClientRecord();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        cl_database.addValueEventListener(myEvent = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot parData: dataSnapshot.getChildren()){
+                    if(parData.child("para_id").getValue().toString().equals(data.get(0))
+                            && parData.child("em_status").getValue().toString().equals("dispatched")) {
+
+                       database.removeEventListener(myValueEvent);
+                       closingClient();
+
+                        break;
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        database.addValueEventListener(myValueEvent = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot parData: dataSnapshot.getChildren()){
+                    Toast.makeText(getApplicationContext(),"This is working",Toast.LENGTH_LONG).show();
+                    if(parData.child("username").getValue().toString().equals(data.get(0))
+                            && parData.child("status").getValue().toString().equals("busy")
+                            && parData.child("video").getValue().toString().equals("no")) {
+                        if(parData.child("loc_lat").getValue() != null &&
+                            parData.child("loc_long").getValue() != null){
+                            double lat = Double.parseDouble(parData.child("loc_lat").getValue().toString());
+                            double lng = Double.parseDouble(parData.child("loc_long").getValue().toString());
+
+                            LatLng parLocation = (new LatLng(lat,lng));
+                            mMap.addMarker(new MarkerOptions().position(parLocation).title("Paramedic's Current Location"));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(parLocation));
+                        }
+
+                        break;
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
+
+    private void closingClient(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+        builder.setMessage("Paramedic has arrived at your location.\nNow closing the session");
+        builder.setTitle("NOTICE");
+        builder.setCancelable(false);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                dialogInterface.cancel();
+
+                cl_database.removeEventListener(myEvent);
+
+                android.os.Process.killProcess(android.os.Process.myPid());
+
+            }
+        });
+
+    }
+
 
 
     /**
@@ -71,41 +176,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
 
-       /* Resources res = getResources();
-        //Containers to store hospital location for display on maps
-        String [] hosp1 = res.getStringArray(R.array.hosp1);
-        String [] hosp2 = res.getStringArray(R.array.hosp2);
-        String [] hosp3 = res.getStringArray(R.array.hosp3);
-        String [] hosp4 = res.getStringArray(R.array.hosp4);
-        String [] hosp5 = res.getStringArray(R.array.hosp5);
 
         mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setRotateGesturesEnabled(true);
 
-        // Add a marker in Sydney and move the camera
-        LatLng hospital1 = (new LatLng(Float.parseFloat(hosp1[1]), Float.parseFloat(hosp1[2])));
-        mMap.addMarker(new MarkerOptions().position(hospital1).title(hosp1[3]));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(hospital1));
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, this);
 
-        LatLng hospital2 = (new LatLng(Float.parseFloat(hosp2[1]), Float.parseFloat(hosp2[2])));
-        mMap.addMarker(new MarkerOptions().position(hospital2).title(hosp2[3]));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(hospital2));
+    }
 
-        LatLng hospital3 = (new LatLng(Float.parseFloat(hosp3[1]), Float.parseFloat(hosp3[2])));
-        mMap.addMarker(new MarkerOptions().position(hospital3).title(hosp3[3]));
+    private void setLastLocation( Location lastLocation){
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(hospital3));
+        LatLng myLoc = new LatLng(lastLocation.getLatitude(),lastLocation.getLongitude());
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLoc,10.0f));
 
-        LatLng hospital4 = (new LatLng(Float.parseFloat(hosp4[1]), Float.parseFloat(hosp4[2])));
-        mMap.addMarker(new MarkerOptions().position(hospital4).title(hosp4[3]));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(hospital4));
+        cl_database.child(clientkey).child("loc_lat").setValue(lastLocation.getLatitude());
+        cl_database.child(clientkey).child("loc_long").setValue(lastLocation.getLongitude());
+    }
 
-        LatLng hospital5 = (new LatLng(Float.parseFloat(hosp5[1]), Float.parseFloat(hosp5[2])));
-        mMap.addMarker(new MarkerOptions().position(hospital5).title(hosp5[3]));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(hospital5));*/
+    private void startClientRecord(){
 
-       // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hospital1,10.0f));
+        clientkey = cl_database.push().getKey();
+
+        cad = new Client_Address_DataBase();
+
+        cad.setCl_city("pending");
+        cad.setCl_province("pending");
+        cad.setCl_street("pending");
+        cad.setContact("pending");
+        cad.setCl_zip("pending");
+        cad.setPara_id(data.get(0));
+        cad.setTime();
+        cad.setEm_status("active");
+        cad.setHrate("pending");
+        cad.setSpo2("pending");
+        cad.setTemp("pending");
+        cad.setLoc_lat(0);
+        cad.setLoc_long(0);
+        cad.setCl_name("pending");
+
+        cl_database.child(clientkey).setValue(cad);
+
     }
 
     public boolean checkLocationPermission() {
@@ -178,26 +290,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
+
+    @Override
+    public void onLocationChanged(Location location) {
+        setLastLocation(location);
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
+    public void onStatusChanged(String provider, int status, Bundle extras) {
 
     }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
 
     }
     //getChildFragmentManager().beginTransaction().replace(R.id.map, mapFragment).commit();
