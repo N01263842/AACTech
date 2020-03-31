@@ -70,6 +70,7 @@ public class HomeFragment extends Fragment {
     private DatabaseReference database;
     private ArrayList client_names, client_status;
     private ListView client_list;
+    private ValueEventListener myvalueEvent;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -94,15 +95,19 @@ public class HomeFragment extends Fragment {
         client_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), DisplayClientData.class);
-                intent.putExtra("client",client_names.get(i).toString());
+                Intent intent = getActivity().getIntent();
+                ArrayList<String> data = intent.getStringArrayListExtra("info");
+                data.add(client_names.get(i).toString());
+                intent = new Intent(getActivity(), DisplayClientData.class);
+                intent.putStringArrayListExtra("client",data);
+                //database.removeEventListener(myvalueEvent);
                 startActivity(intent);
             }
         });
 
         database = FirebaseDatabase.getInstance().getReference().child("clients");
 
-        database.addValueEventListener(new ValueEventListener() {
+        database.addValueEventListener(myvalueEvent = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 client_names = new ArrayList();

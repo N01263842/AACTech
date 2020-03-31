@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.EventListener;
 
 /*
  * Team-Name: AAC-Tech
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 public class ClientParamedHome extends AppCompatActivity {
 
     private DatabaseReference database;
+    private ValueEventListener myvalueEvent;
 
 
     @Override
@@ -48,6 +50,8 @@ public class ClientParamedHome extends AppCompatActivity {
 
         paramedic.setVisibility(View.GONE);
         client.setVisibility(View.GONE);
+
+
 
 
     /*   paramedic.setOnClickListener(new View.OnClickListener() {
@@ -156,19 +160,20 @@ public class ClientParamedHome extends AppCompatActivity {
     private void ClientGetParamedic(){
 
 
-        database.addValueEventListener(new ValueEventListener() {
+        database.addValueEventListener(myvalueEvent = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ArrayList<String> param = new ArrayList<String>();
 
                 for(DataSnapshot paramedInfo:dataSnapshot.getChildren()){
                     if(paramedInfo.child("status").getValue().toString().equals("active")
-                            && paramedInfo.child("video").getValue().toString().equals("no")){
+                           /* && paramedInfo.child("video").getValue().toString().equals("no")*/){
 
                         param.add(paramedInfo.child("username").getValue().toString());
                         param.add(paramedInfo.getKey());
-                        Intent intent = new Intent(getApplicationContext(),ParaVideoChat.class);
+                        Intent intent = new Intent(getApplicationContext(),videoChat_Activity.class);
                         intent.putStringArrayListExtra("para_id",param);
+                        database.removeEventListener(myvalueEvent);
                         startActivity(intent);
                         break;
 

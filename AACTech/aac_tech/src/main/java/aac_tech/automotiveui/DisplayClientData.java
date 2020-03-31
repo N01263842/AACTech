@@ -5,6 +5,7 @@
 package aac_tech.automotiveui;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -17,6 +18,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -43,6 +46,7 @@ public class DisplayClientData extends AppCompatActivity {
     private TextView status, temp, oxygen, heart_r, home_addr;
     private DatabaseReference database;
     private Intent intent;
+    private ArrayList<String> data;
 
 
 
@@ -50,6 +54,9 @@ public class DisplayClientData extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paramed);
+
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
 
         status = (TextView)findViewById(R.id.patient_stat);
         temp = (TextView)findViewById(R.id.temperat);
@@ -77,7 +84,9 @@ public class DisplayClientData extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 intent = getIntent();
-                String client_name = intent.getStringExtra("client");
+                data  = intent.getStringArrayListExtra("client");
+                String client_name = data.get(data.size() - 1);
+                data.remove(data.size() - 1);
 
                 String street = new String();
                 String city = new String();
@@ -133,5 +142,14 @@ public class DisplayClientData extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case android.R.id.home:
+                Intent intent = new Intent(getApplicationContext(),optionsNavigation.class);
+                intent.putStringArrayListExtra("info",data);
+                startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

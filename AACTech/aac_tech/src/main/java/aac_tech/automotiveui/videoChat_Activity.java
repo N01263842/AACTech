@@ -20,6 +20,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.material.navigation.NavigationView;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -81,6 +82,10 @@ public class videoChat_Activity extends AppCompatActivity
     private String clientKey;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
+    private ProgressDialog dialog;
+    private ValueEventListener myValueEvent;
+    ArrayList<String> paraData;
+
 
     private DrawerLayout mDrawerLayout;
   //  Button start, connect, disconnect;
@@ -93,27 +98,16 @@ public class videoChat_Activity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_layout);
 
-
-        //UpdateInfo upd = new UpdateInfo();
-
-
-
-
-       // Toolbar toolbar = findViewById(R.id.toolbar);
-      //  setSupportActionBar(toolbar);
-
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-      //  database = FirebaseDatabase.getInstance().getReference().child("clients");
         mdatabase = FirebaseDatabase.getInstance().getReference().child("paramedics");
+        dialog =ProgressDialog.show(videoChat_Activity.this,"PLEASE WAIT","Connecting you to an available Paramedic...",true);
 
-
-       // clientKey = database.push().getKey();
 
         Intent intent = getIntent();
-        ArrayList<String> paraData = intent.getStringArrayListExtra("para_id");
+        paraData = intent.getStringArrayListExtra("para_id");
 
 
         mdatabase.child(paraData.get(1)).child("video").setValue("yes");
@@ -122,20 +116,40 @@ public class videoChat_Activity extends AppCompatActivity
 
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
-     //   disconnectSubscriber = (Button)findViewById(R.id.disconnect);
-
-       // disconnectSubscriber.setVisibility(View.GONE);
 
         requestPermissions();
 
-      /*  disconnectSubscriber.setOnClickListener(new View.OnClickListener() {
+        mdatabase.addValueEventListener(myValueEvent = new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                disconnectDialog();
-            }
-        });*/
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-         NavigationView navigationView = findViewById(R.id.nav_view);
+               for(DataSnapshot parData: dataSnapshot.getChildren()){
+                   if(parData.child("username").getValue().toString().equals(paraData.get(0))
+                   && parData.child("status").getValue().toString().equals("busy")
+                   && parData.child("video").getValue().toString().equals("no")) {
+
+                       mSession.unsubscribe(mSubscriber);
+                       mSession.unpublish(mPublisher);
+                       mSubscriberViewContainer.removeAllViews();
+
+                       Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                       intent.putStringArrayListExtra("para", paraData);
+                       mdatabase.removeEventListener(myValueEvent);
+                       startActivity(intent);
+                       finish();
+                       break;
+                   }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -293,6 +307,9 @@ public class videoChat_Activity extends AppCompatActivity
 
 
         mSession.publish(mPublisher);
+
+
+
     }
 
 
@@ -305,6 +322,7 @@ public class videoChat_Activity extends AppCompatActivity
     @Override
     public void onStreamReceived(Session session, Stream stream) {
         Log.i(LOG_TAG, "Stream Received");
+        dialog.dismiss();
 
 
         if (mSubscriber == null) {

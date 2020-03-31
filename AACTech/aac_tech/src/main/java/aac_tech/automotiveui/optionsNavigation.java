@@ -40,6 +40,7 @@ public class optionsNavigation extends AppCompatActivity {
     Resources res;
     private String [] hosp1, hosp2, hosp3, hosp4, hosp5;
     private DatabaseReference database;
+    private ValueEventListener myvalueEvent;
 
 
 
@@ -63,19 +64,20 @@ public class optionsNavigation extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
 
-        database.addValueEventListener(new ValueEventListener() {
+        database.addValueEventListener(myvalueEvent = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Intent intent = getIntent();
 
                 ArrayList<String> paraData = intent.getStringArrayListExtra("info");
-
-                for(DataSnapshot clientData: dataSnapshot.getChildren()){
-                   if(clientData.child("username").getValue().toString().equals(paraData.get(1))){
-                       if(clientData.child("video").getValue().toString().equals("yes")){
-                           displayVideoChat(paraData);
-                       }
-                   }
+                if(paraData != null) {
+                    for (DataSnapshot clientData : dataSnapshot.getChildren()) {
+                        if (clientData.child("username").getValue().toString().equals(paraData.get(1))) {
+                            if (clientData.child("video").getValue().toString().equals("yes")) {
+                                displayVideoChat(paraData);
+                            }
+                        }
+                    }
                 }
 
 
@@ -135,12 +137,12 @@ public class optionsNavigation extends AppCompatActivity {
 
                 dialogInterface.cancel();
                 Intent intent = new Intent(getApplicationContext(), ParaVideoChat.class);
-                intent.putStringArrayListExtra("info",myinfo);
+                intent.putStringArrayListExtra("par_info",myinfo);
 
                 // intent.putExtra("sign_out",info.get(5).toString());
-
+                database.removeEventListener(myvalueEvent);
                 database.child(myinfo.get(5).toString()).child("status").setValue("busy");
-                database.child(myinfo.get(5).toString()).child("video").setValue("no");
+                //database.child(myinfo.get(5).toString()).child("video").setValue("no");
 
                 startActivity(intent);
                 //UpdateInfo update = new UpdateInfo();

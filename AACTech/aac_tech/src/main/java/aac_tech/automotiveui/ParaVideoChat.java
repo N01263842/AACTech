@@ -29,8 +29,11 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.opentok.android.Session;
 import com.opentok.android.Stream;
 import com.opentok.android.Publisher;
@@ -87,29 +90,8 @@ public class ParaVideoChat extends AppCompatActivity
         //UpdateInfo upd = new UpdateInfo();
 
 
-        // Toolbar toolbar = findViewById(R.id.toolbar);
-        //  setSupportActionBar(toolbar);
-
-        /*ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);*/
-
-
-        //mDrawerLayout = findViewById(R.id.drawer_layout);
-      //  disconnectSubscriber = (Button)findViewById(R.id.disconnect1);
-
-       // disconnectSubscriber.setVisibility(View.GONE);
-
         requestPermissions();
 
-       /* disconnectSubscriber.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = getIntent();
-                ArrayList<String> minfo = intent.getStringArrayListExtra("info");
-                disconnectDialog(minfo);
-            }
-        });*/
 
 
     }
@@ -125,7 +107,12 @@ public class ParaVideoChat extends AppCompatActivity
 
                 dialogInterface.cancel();
                 mSession.unsubscribe(mSubscriber); // Disconnects the patient
+                mSession.unpublish(mPublisher);
+                mPublisherViewContainer.removeAllViews();
+                mSubscriberViewContainer.removeAllViews();
+                database.child(info.get(5)).child("video").setValue("no");
                 Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                intent.putStringArrayListExtra("info2", info);
 
                 startActivity(intent);
             }
@@ -137,6 +124,9 @@ public class ParaVideoChat extends AppCompatActivity
                 dialogInterface.cancel();
             }
         });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 
@@ -181,28 +171,11 @@ public class ParaVideoChat extends AppCompatActivity
         mPublisher = new Publisher.Builder(this).build();
         mPublisher.setPublisherListener(this);
 
-      /*  if(subscriberCheck) {
-            mSubscriberViewContainer.removeAllViews();
-
-            mPublisherViewContainer.setVisibility(View.VISIBLE);
-
-            mPublisherViewContainer.addView(mPublisher.getView());
-
-            if (mPublisher.getView() instanceof GLSurfaceView) {
-                ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
-            }
-        }
-        else{*/
-       // mPublisherViewContainer.removeAllViews();
-
-       // if(mPublisherViewContainer.getVisibility() == View.VISIBLE) mPublisherViewContainer.setVisibility(View.GONE);
-
         mPublisherViewContainer.addView(mPublisher.getView());
 
         if (mPublisher.getView() instanceof GLSurfaceView) {
             ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
         }
-        // }
 
         mSession.publish(mPublisher);
     }
@@ -226,15 +199,6 @@ public class ParaVideoChat extends AppCompatActivity
             mSubscriberViewContainer.addView(mSubscriber.getView());
         }
 
-
-
-      /*  mPublisherViewContainer.setVisibility(View.VISIBLE);
-
-        mPublisherViewContainer.addView(mPublisher.getView());
-
-        if (mPublisher.getView() instanceof GLSurfaceView) {
-            ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
-        }*/
     }
 
     @Override
@@ -316,17 +280,15 @@ public class ParaVideoChat extends AppCompatActivity
         }));
     }
 
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.disconnect3:
                 Intent intent = getIntent();
-                ArrayList<String> minfo = intent.getStringArrayListExtra("info");
-                disconnectDialog(minfo);
+                ArrayList<String> paraInfo = intent.getStringArrayListExtra("par_info");
+                disconnectDialog(paraInfo);
                 break;
+
         }
         return true;
     }
@@ -340,6 +302,7 @@ public class ParaVideoChat extends AppCompatActivity
 
         return true;
     }
+
 
 
 }

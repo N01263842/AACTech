@@ -6,5 +6,5 @@
         android:id="@+id/disconnect3"
         android:icon="@drawable/ic_call_end_black_24dp"
         android:title="@string/disconnect"
-        app:showAsAction="always|withText" />
+        app:showAsAction="always" />
 </menu>

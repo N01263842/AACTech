@@ -34,6 +34,7 @@ public class paramedLogin extends AppCompatActivity {
    private EditText uname;
    private EditText passwd;
    private int data_retrieved;
+   private ValueEventListener myvalueEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,7 @@ public class paramedLogin extends AppCompatActivity {
     private void getParamedicInfo(){
 
 
-        database.addValueEventListener(new ValueEventListener() {
+        database.addValueEventListener(myvalueEvent = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String pass = new String();
@@ -134,9 +135,10 @@ public class paramedLogin extends AppCompatActivity {
                         intent.putStringArrayListExtra("info", paraInfo);
                         database.child(parent).child("status").setValue("active");
                         database.child(parent).child("activity").setValue(date.getTime());
+                        database.removeEventListener(myvalueEvent);
                         startActivity(intent);
-                        uname.setText("");
-                        passwd.setText("");
+                        //uname.setText("");
+                      //  passwd.setText("");
 
                     } else {
                         Toast toast = Toast.makeText(paramedLogin.this, "Incorrect password!", Toast.LENGTH_LONG);
